@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class LeitorArquivos {
 
-    // Função que lê um arquivo pelo camnho e devolve uma lista de Strings (matriz de caracteres)
+    // Função que lê um arquivo pelo camnho e devolve uma lista de Strings (as linhas)
     public static List<String> lerArquivo(final String fileName) throws FileNotFoundException {
         final List<String> linhas = new ArrayList<>();
         final File file = new File(fileName);

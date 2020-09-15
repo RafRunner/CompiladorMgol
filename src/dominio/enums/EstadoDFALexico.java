@@ -4,14 +4,14 @@ package dominio.enums;
 import dominio.excecoes.EstadoDeErroException;
 
 // Enum dos possiveis estados do DFA, se o token associado é null, não é estado final, caso contrário é
-public enum EstadoDFA {
+public enum EstadoDFALexico {
 
     S0(null, (caractere -> {
         if (Character.isAlphabetic(caractere)) {
-            return EstadoDFA.S8;
+            return EstadoDFALexico.S8;
         }
         if (Character.isDigit(caractere)) {
-            return EstadoDFA.S1;
+            return EstadoDFALexico.S1;
         }
 
         throw new EstadoDeErroException("Caractere inesperado: " + caractere);
@@ -39,13 +39,13 @@ public enum EstadoDFA {
     // Função que leva de um estado a outro através de um caractere. Caso leia um caracter que não leva a outro estado,
     // lança a EstadoDeErroException com detalhes do erro
     private interface FuncaoTransicao {
-        EstadoDFA aplicar(final char caractere) throws EstadoDeErroException;
+        EstadoDFALexico aplicar(final char caractere) throws EstadoDeErroException;
     }
 
     private Token tokenAssociado;
     private FuncaoTransicao funcaoTransicao;
 
-    EstadoDFA(final Token tokenAssociado, final FuncaoTransicao funcaoTransicao) {
+    EstadoDFALexico(final Token tokenAssociado, final FuncaoTransicao funcaoTransicao) {
         this.tokenAssociado = tokenAssociado;
         this.funcaoTransicao = funcaoTransicao;
     }
@@ -54,7 +54,7 @@ public enum EstadoDFA {
         return tokenAssociado;
     }
 
-    public EstadoDFA aplicarFuncaoTrasicao(final char caractere) throws EstadoDeErroException {
+    public EstadoDFALexico aplicarFuncaoTrasicao(final char caractere) throws EstadoDeErroException {
         return funcaoTransicao.aplicar(caractere);
     }
 }

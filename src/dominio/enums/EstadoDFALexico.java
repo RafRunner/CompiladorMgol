@@ -86,9 +86,9 @@ public enum EstadoDFALexico {
 
     S6(null, caractere -> {
         switch (caractere) {
-            case '\n': throw new EstadoDeErroException("Quebra de linha inesperada no meio de declaração de constante literal");
-            case '\\': return values()[19];
             case '"' : return values()[7];
+            case '\\': return values()[19];
+            case '\n': throw new EstadoDeErroException("Quebra de linha inesperada no meio de declaração de constante literal");
         }
 
         return values()[6];

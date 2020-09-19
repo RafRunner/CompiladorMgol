@@ -2,18 +2,25 @@ package dominio;
 
 import dominio.enums.EstadoDFALexico;
 import dominio.excecoes.EstadoDeErroException;
+import dominio.excecoes.FimDeTokenValidoException;
 
 // Classe que representa o DFA léxico, guarda estado e é capaz de ler caracteres
 public class DFALexico {
 
-    private EstadoDFALexico estado = EstadoDFALexico.S0;
+    public static final EstadoDFALexico ESTADO_INICIAL = EstadoDFALexico.S0;
 
-    public EstadoDFALexico aplicarFuncaoTrasicao(final char caractere) throws EstadoDeErroException {
+    private EstadoDFALexico estado = ESTADO_INICIAL;
+
+    public EstadoDFALexico aplicarFuncaoTrasicao(final char caractere) throws EstadoDeErroException, FimDeTokenValidoException {
         estado = estado.aplicarFuncaoTrasicao(caractere);
         return estado;
     }
 
+    public EstadoDFALexico getEstado() {
+        return estado;
+    }
+
     public void resetar() {
-        estado = EstadoDFALexico.S0;
+        estado = ESTADO_INICIAL;
     }
 }

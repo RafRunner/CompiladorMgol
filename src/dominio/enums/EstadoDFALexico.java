@@ -1,6 +1,5 @@
 package dominio.enums;
 
-
 import dominio.CaracteresDeEscape;
 import dominio.excecoes.EstadoDeErroException;
 import dominio.excecoes.FimDeTokenValidoException;
@@ -86,14 +85,10 @@ public enum EstadoDFALexico {
     }),
 
     S6(null, caractere -> {
-        if (caractere == '\n') {
-            throw new EstadoDeErroException("Quebra de linha inesperada no meio de declaração de constante literal");
-        }
-        if (caractere == '\\') {
-            return values()[19];
-        }
-        if (caractere == '"') {
-            return values()[7];
+        switch (caractere) {
+            case '\n': throw new EstadoDeErroException("Quebra de linha inesperada no meio de declaração de constante literal");
+            case '\\': return values()[19];
+            case '"' : return values()[7];
         }
 
         return values()[6];
@@ -136,11 +131,10 @@ public enum EstadoDFALexico {
     }),
 
     S13(Token.OPR, caractere -> {
-        if (caractere == '=' || caractere == '>') {
-            return values()[11];
-        }
-        if (caractere == '-') {
-            return values()[15];
+        switch (caractere) {
+            case '=':
+            case '>': return values()[11];
+            case '-': return values()[15];
         }
 
         throw new FimDeTokenValidoException("Fim de operador relacional");

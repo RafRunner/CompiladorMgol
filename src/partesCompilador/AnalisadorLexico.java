@@ -1,10 +1,8 @@
 package partesCompilador;
 
-import dominio.LeitorArquivos;
 import dominio.TokenEAtributos;
 import dominio.enums.Token;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +13,9 @@ public class AnalisadorLexico {
     private final List<String> codigoFonte;
     // A tabela de símbolos representada como um Mapa (HashMap) que leva de lexema (String) à TokenEAtributos
     private final Map<String, TokenEAtributos> tabelaDeSimbolos = new HashMap<>();
+
+    private int linha = 0;
+    private int coluna = 0;
 
     // Populando a tabela de símbolos com as palavras reservadas
     private void iniciaTabelaDeSimbolos() {
@@ -29,16 +30,12 @@ public class AnalisadorLexico {
         tabelaDeSimbolos.put(Token.fim.toString(), Token.fim.criaComAtributos());
     }
 
-    public AnalisadorLexico(final String nomeArquivoCodigoFonte) throws FileNotFoundException {
-        this(LeitorArquivos.lerArquivo(nomeArquivoCodigoFonte));
-    }
-
     public AnalisadorLexico(final List<String> codigoFonte) {
         this.codigoFonte = codigoFonte;
         iniciaTabelaDeSimbolos();
     }
 
-    public TokenEAtributos lexico(final int linha, final int coluna) {
+    public TokenEAtributos lexico() {
         return null;
     }
 

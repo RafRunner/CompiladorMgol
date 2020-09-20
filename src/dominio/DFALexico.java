@@ -11,9 +11,8 @@ public class DFALexico {
 
     private EstadoDFALexico estado = ESTADO_INICIAL;
 
-    public EstadoDFALexico aplicarFuncaoTrasicao(final char caractere) throws EstadoDeErroException, FimDeTokenValidoException {
+    public void aplicarFuncaoTrasicao(final char caractere) throws EstadoDeErroException, FimDeTokenValidoException {
         estado = estado.aplicarFuncaoTrasicao(caractere);
-        return estado;
     }
 
     public EstadoDFALexico getEstado() {

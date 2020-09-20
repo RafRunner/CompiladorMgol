@@ -48,8 +48,8 @@ public enum Token {
         return new TokenEAtributos(this, lexema, tipo);
     }
 
-    public TokenEAtributos criaComAtributos(final Tipo tipo) {
-        return new TokenEAtributos(this, this.toString(), tipo);
+    public TokenEAtributos criaComAtributos(final String lexema) {
+        return new TokenEAtributos(this, lexema, null);
     }
 
     public TokenEAtributos criaComAtributos() {

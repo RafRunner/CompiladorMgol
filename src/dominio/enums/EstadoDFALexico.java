@@ -149,7 +149,7 @@ public enum EstadoDFALexico {
     }),
 
     S16(Token.AB_P, caractere -> {
-        throw new FimDeTokenValidoException("Fim de ponto e vírgula");
+        throw new FimDeTokenValidoException("Fim de abre parênteses");
     }),
 
     S17(Token.FC_P, caractere -> {
@@ -157,7 +157,7 @@ public enum EstadoDFALexico {
     }),
 
     S18(Token.PT_V, caractere -> {
-        throw new FimDeTokenValidoException("Fim de abre parênteses");
+        throw new FimDeTokenValidoException("Fim de ponto e vírgula");
     }),
 
     S19(null, caractere -> {

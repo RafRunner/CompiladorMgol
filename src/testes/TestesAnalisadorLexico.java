@@ -1,11 +1,14 @@
 package testes;
 
 import dominio.DFALexico;
+import dominio.TokenEAtributos;
 import dominio.enums.Token;
 import dominio.excecoes.EstadoDeErroException;
 import dominio.excecoes.FimDeTokenValidoException;
+import partesCompilador.AnalisadorLexico;
 
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestesAnalisadorLexico {
 
@@ -14,6 +17,21 @@ public class TestesAnalisadorLexico {
         for (final char c : sequencia.toCharArray()) {
             DFA.aplicarFuncaoTrasicao(c);
         }
+    }
+
+    private static List<TokenEAtributos> scanneaCodigoFonte(final List<String> codigoFonte) {
+        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte);
+
+        final List<TokenEAtributos> tokens = new ArrayList<>();
+        Token tokenAtual = null;
+
+        while (!Token.EOF.equals(tokenAtual)) {
+            final TokenEAtributos tokenEAtributos = analisadorLexico.lexico();
+            tokens.add(tokenEAtributos);
+            tokenAtual = tokenEAtributos.getToken();
+        }
+
+        return tokens;
     }
 
     public static void main(String[] args) throws Exception {
@@ -128,5 +146,14 @@ public class TestesAnalisadorLexico {
         } catch (EstadoDeErroException e) {
             System.out.println("8 - " + e.getMessage());
         }
+
+        System.out.println("\n---------------------------------Testes do Analisador Lexico----------------------------------------------\n");
+        System.out.println("Testando scan de códigos fonte e comparado com a lista de TokenEAtributo esperada. Se um teste der false falhou\n");
+
+        final var tokens1 = scanneaCodigoFonte(List.of("escreva \"Digite A:\";"));
+        System.out.println("1 - " + List.of(Token.id.criaComAtributos("escreva"),
+                Token.Literal.criaComAtributos("\"Digite A:\""),
+                Token.PT_V.criaComAtributos(";"),
+                Token.EOF.criaComAtributos()).equals(tokens1));
     }
 }

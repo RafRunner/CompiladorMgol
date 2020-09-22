@@ -1,6 +1,7 @@
 package partesCompilador;
 
 import dominio.DFALexico;
+import dominio.Erro;
 import dominio.TokenEAtributos;
 import dominio.enums.Token;
 import dominio.excecoes.EstadoDeErroException;
@@ -18,7 +19,7 @@ public class AnalisadorLexico {
     // A tabela de símbolos representada como um Mapa (HashMap) que leva de lexema (String) à TokenEAtributos
     private final Map<String, TokenEAtributos> tabelaDeSimbolos = new HashMap<>();
 
-    private final List<String> erros = new ArrayList<>();
+    private final List<Erro> erros = new ArrayList<>();
 
     private final DFALexico DFA = new DFALexico();
 
@@ -77,20 +78,20 @@ public class AnalisadorLexico {
                 lexema.append(caractereAtual);
             }
 
-        } catch (EstadoDeErroException e1) {
+        } catch (final EstadoDeErroException e1) {
             coluna--;
-            final String erro = "Erro na linha " + linha + " coluna " + coluna + ": " + e1.getMessage();
+            final Erro erro = new Erro(e1.getMessage(), linha, coluna);
             erros.add(erro);
             System.out.println(erro);
 
             return Token.ERRO.criaComAtributos(lexema.toString());
 
-        } catch (FimDeTokenValidoException e2) {
+        } catch (final FimDeTokenValidoException e2) {
             coluna--;
             final Token token = DFA.getEstado().getTokenAssociado();
             final TokenEAtributos tokenEAtributos = token.criaComAtributos(lexema.toString());
 
-            if (token.equals(Token.id)) {
+            if (token == Token.id) {
                 tabelaDeSimbolos.putIfAbsent(lexema.toString(), tokenEAtributos);
             }
             else {
@@ -105,7 +106,7 @@ public class AnalisadorLexico {
         return tabelaDeSimbolos;
     }
 
-    public List<String> getErros() {
+    public List<Erro> getErros() {
         return erros;
     }
 }

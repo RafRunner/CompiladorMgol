@@ -41,12 +41,6 @@ public class AnalisadorLexico {
 
     public AnalisadorLexico(final List<String> codigoFonte) {
         this.codigoFonte.addAll(codigoFonte);
-
-        // Adicionamos o \n (quebra de linha) no fim da última linha para garantir que, após ler o último caractere da linha,
-        // o DFA tenha mais um caractere (que sempre é um finalizador de token) para ler. Como todas as outras linhas pela
-        // abstração de código fonte feita aqui já terminam em \n e linhas vazias são válidas, essa solução é válida
-        final String ultimaLinha = this.codigoFonte.remove(codigoFonte.size() - 1) + "\n";
-        this.codigoFonte.add(ultimaLinha);
         iniciaTabelaDeSimbolos();
     }
 
@@ -56,7 +50,9 @@ public class AnalisadorLexico {
             return Token.EOF.criaComAtributos();
         }
 
-        final String linhaAtual = codigoFonte.get(linha);
+        // Adicionamos o \n (quebra de linha) no fim de cada linha para garantir que, após ler o último caractere da linha,
+        // o DFA tenha mais um caractere (que sempre é um finalizador de token) para ler.
+        final String linhaAtual = codigoFonte.get(linha) + "\n";
         final StringBuilder lexema = new StringBuilder();
         DFA.resetar();
 

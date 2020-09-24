@@ -31,7 +31,7 @@ public class TokenEAtributos {
 
     @Override
     public String toString() {
-        return "TokenEAtributos { token:" + token + ", lexema:" + lexema + ", tipo:" + tipo + " }";
+        return "TokenEAtributos [ token: " + token + ", lexema: '" + lexema + "', tipo: " + tipo + " ]";
     }
 
     @Override

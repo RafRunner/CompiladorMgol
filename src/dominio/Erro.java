@@ -1,14 +1,12 @@
 package dominio;
 
-import dominio.enums.Token;
-
 public class Erro {
 
-    private String mensgem;
-    private int linha;
-    private int coluna;
+    private final String mensgem;
+    private final int linha;
+    private final int coluna;
 
-    public Erro(String mensgem, int linha, int coluna) {
+    public Erro(final String mensgem, final int linha, final int coluna) {
         this.mensgem = mensgem;
         this.linha = linha;
         this.coluna = coluna;

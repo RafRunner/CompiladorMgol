@@ -9,9 +9,9 @@ public class TokenEAtributos {
 
     private final Token token;
     private final String lexema;
-    private final Tipo tipo;
+    private Tipo tipo;
 
-    public TokenEAtributos(Token token, String lexema, Tipo tipo) {
+    public TokenEAtributos(final Token token, final String lexema, final Tipo tipo) {
         this.token = token;
         this.lexema = lexema;
         this.tipo = tipo;
@@ -27,6 +27,10 @@ public class TokenEAtributos {
 
     public Tipo getTipo() {
         return tipo;
+    }
+
+    public void setTipo(final Tipo tipo) {
+        this.tipo = tipo;
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.Map;
 public class AnalisadorLexico {
 
     // O código fonte representado como uma Lista de String (linhas e colunas)
-    private final List<String> codigoFonte = new ArrayList<>();
+    private final List<String> codigoFonte;
     // A tabela de símbolos representada como um Mapa (HashMap) que leva de lexema (String) à TokenEAtributos
     private final Map<String, TokenEAtributos> tabelaDeSimbolos = new HashMap<>();
 
@@ -37,10 +37,13 @@ public class AnalisadorLexico {
         tabelaDeSimbolos.put(Token.entao.toString(), Token.entao.criaComAtributos());
         tabelaDeSimbolos.put(Token.fimse.toString(), Token.fimse.criaComAtributos());
         tabelaDeSimbolos.put(Token.fim.toString(), Token.fim.criaComAtributos());
+        tabelaDeSimbolos.put(Token.lit.toString(), Token.lit.criaComAtributos());
+        tabelaDeSimbolos.put(Token.inteiro.toString(), Token.inteiro.criaComAtributos());
+        tabelaDeSimbolos.put(Token.real.toString(), Token.real.criaComAtributos());
     }
 
     public AnalisadorLexico(final List<String> codigoFonte) {
-        this.codigoFonte.addAll(codigoFonte);
+        this.codigoFonte = codigoFonte;
         iniciaTabelaDeSimbolos();
     }
 
@@ -85,14 +88,21 @@ public class AnalisadorLexico {
         } catch (final FimDeTokenValidoException e2) {
             coluna--;
             final Token token = DFA.getEstado().getTokenAssociado();
-            final TokenEAtributos tokenEAtributos = token.criaComAtributos(lexema.toString());
+            TokenEAtributos tokenEAtributos = token.criaComAtributos(lexema.toString());
 
             if (token == Token.id) {
-                tabelaDeSimbolos.putIfAbsent(lexema.toString(), tokenEAtributos);
+                final TokenEAtributos tokenJaNaTabela = tabelaDeSimbolos.get(lexema.toString());
+
+                // Já está na tebela, então pegamos a versão na tabela
+                if (tokenJaNaTabela != null) {
+                    tokenEAtributos = tokenJaNaTabela;
+                }
+                // Não está na tebela, então colocamos
+                else {
+                    tabelaDeSimbolos.put(lexema.toString(), tokenEAtributos);
+                }
             }
-            else {
-                System.out.println(tokenEAtributos);
-            }
+            System.out.println(tokenEAtributos);
 
             return tokenEAtributos;
         }

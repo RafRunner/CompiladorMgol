@@ -42,7 +42,10 @@ public enum Token {
     se,
     entao,
     fimse,
-    fim;
+    fim,
+    lit,
+    inteiro,
+    real;
 
     public TokenEAtributos criaComAtributos(final String lexema, final Tipo tipo) {
         return new TokenEAtributos(this, lexema, tipo);

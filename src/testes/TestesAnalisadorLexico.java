@@ -151,7 +151,7 @@ public class TestesAnalisadorLexico {
         System.out.println("Testando scan de códigos fonte e comparado com a lista de TokenEAtributo esperada. Se um teste der false falhou\n");
 
         final var tokens1 = scanneaCodigoFonte(List.of("escreva \"Digite A:\";"));
-        System.out.println("1 - " + List.of(Token.id.criaComAtributos("escreva"),
+        System.out.println("1 - " + List.of(Token.escreva.criaComAtributos(),
                 Token.Literal.criaComAtributos("\"Digite A:\""),
                 Token.PT_V.criaComAtributos(";"),
                 Token.EOF.criaComAtributos()).equals(tokens1));

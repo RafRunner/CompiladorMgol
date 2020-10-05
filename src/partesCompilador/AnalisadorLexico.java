@@ -79,7 +79,7 @@ public class AnalisadorLexico {
 
         } catch (final EstadoDeErroException e1) {
             coluna--;
-            final Erro erro = new Erro(e1.getMessage(), linha, coluna);
+            final Erro erro = new Erro(e1.getMessage(), linha+1, coluna+1);
             erros.add(erro);
             System.out.println(erro);
 

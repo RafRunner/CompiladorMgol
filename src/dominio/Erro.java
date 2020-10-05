@@ -26,6 +26,6 @@ public class Erro {
 
     @Override
     public String toString() {
-        return "Erro na linha " + getLinha() + " coluna " + getLinha() + ": " + getMensgem();
+        return "Erro na linha " + getLinha() + " coluna " + getColuna() + ": " + getMensgem();
     }
 }

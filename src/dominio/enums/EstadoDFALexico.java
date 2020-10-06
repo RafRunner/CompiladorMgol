@@ -25,8 +25,8 @@ public enum EstadoDFALexico {
             case '*':
             case '-':
             case '+': return values()[14];
-            case ')': return values()[16];
-            case '(': return values()[17];
+            case '(': return values()[16];
+            case ')': return values()[17];
             case ';': return values()[18];
         }
 

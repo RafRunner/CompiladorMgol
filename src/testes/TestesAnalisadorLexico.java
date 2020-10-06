@@ -1,14 +1,12 @@
 package testes;
 
 import dominio.DFALexico;
-import dominio.TokenEAtributos;
+import dominio.LeitorArquivos;
 import dominio.enums.Token;
 import dominio.excecoes.EstadoDeErroException;
 import dominio.excecoes.FimDeTokenValidoException;
 import main.Main;
-import partesCompilador.AnalisadorLexico;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TestesAnalisadorLexico {
@@ -140,6 +138,23 @@ public class TestesAnalisadorLexico {
         System.out.println("1 - " + List.of(Token.escreva.criaComAtributos(),
                 Token.Literal.criaComAtributos("\"Digite A:\""),
                 Token.PT_V.criaComAtributos(";"),
-                Token.EOF.criaComAtributos()).equals(tokens1));
+                Token.EOF.criaComAtributos("")).equals(tokens1));
+
+        final var tokens2 = Main.scanneaCodigoFonte(List.of("B <- B + 3 / (A + 1);"));
+        System.out.println("2 - " + List.of(Token.id.criaComAtributos("B"),
+                Token.RCB.criaComAtributos("<-"),
+                Token.id.criaComAtributos("B"),
+                Token.OPM.criaComAtributos("+"),
+                Token.NUM.criaComAtributos("3"),
+                Token.OPM.criaComAtributos("/"),
+                Token.AB_P.criaComAtributos("("),
+                Token.id.criaComAtributos("A"),
+                Token.OPM.criaComAtributos("+"),
+                Token.NUM.criaComAtributos("1"),
+                Token.FC_P.criaComAtributos(")"),
+                Token.PT_V.criaComAtributos(";"),
+                Token.EOF.criaComAtributos("")).equals(tokens2));
+
+        Main.scanneaCodigoFonte(LeitorArquivos.lerArquivo("res/teste.mgol"));
     }
 }

@@ -12,9 +12,7 @@ import java.util.List;
 
 public class Main {
 
-    public static List<TokenEAtributos> scanneaCodigoFonte(final List<String> codigoFonte) {
-        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte);
-
+    private static List<TokenEAtributos> scanneaCodigoFonte(final AnalisadorLexico analisadorLexico) {
         final List<TokenEAtributos> tokens = new ArrayList<>();
         Token tokenAtual = null;
 
@@ -27,9 +25,13 @@ public class Main {
         return tokens;
     }
 
+    public static List<TokenEAtributos> scanneaCodigoFonte(final List<String> codigoFonte) {
+        return scanneaCodigoFonte(new AnalisadorLexico(codigoFonte));
+    }
+
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.out.println("Número incorreto de argumentos! Informe apenas o nome do arquivo!");
+            System.out.println("Número incorreto de argumentos! Informe o nome do arquivo e somente ele!");
             return;
         }
 
@@ -48,7 +50,8 @@ public class Main {
             return;
         }
 
-        scanneaCodigoFonte(codigoFonte);
-
+        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte);
+        scanneaCodigoFonte(analisadorLexico);
+        System.out.println("\n" + analisadorLexico.tabelaDeSimbolosToString());
     }
 }

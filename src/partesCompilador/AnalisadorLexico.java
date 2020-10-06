@@ -50,7 +50,9 @@ public class AnalisadorLexico {
     public TokenEAtributos lexico() {
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF
         if (linha >= codigoFonte.size()) {
-            return Token.EOF.criaComAtributos();
+            final TokenEAtributos eof = Token.EOF.criaComAtributos("");
+            System.out.println(eof);
+            return eof;
         }
 
         // Adicionamos o \n (quebra de linha) no fim de cada linha para garantir que, após ler o último caractere da linha,
@@ -114,5 +116,13 @@ public class AnalisadorLexico {
 
     public List<Erro> getErros() {
         return erros;
+    }
+
+    public String tabelaDeSimbolosToString() {
+        final StringBuilder sb = new StringBuilder("Tabela de símbolos:\n");
+
+        tabelaDeSimbolos.forEach((key, value) -> sb.append(key).append(" -> ").append(value).append("\n"));
+
+        return sb.toString();
     }
 }

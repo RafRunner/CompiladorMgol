@@ -30,7 +30,7 @@ public enum EstadoDFALexico {
             case ';': return values()[18];
         }
 
-        throw new EstadoDeErroException("Caractere inesperado: " + caractere);
+        throw new EstadoDeErroException("Caractere inesperado: " + caractere, ((coluna, linhaAtual) -> coluna) );
     }),
 
     S1(Token.NUM, caractere -> {
@@ -106,6 +106,7 @@ public enum EstadoDFALexico {
         throw new FimDeTokenValidoException("Fim de declaração de identificador");
     }),
 
+
     S9(null, caractere -> {
         if (caractere == '}') {
             return values()[10];
@@ -165,7 +166,11 @@ public enum EstadoDFALexico {
             return values()[6];
         }
 
-        throw new EstadoDeErroException("Sequência de escape: \\" + caractere + " inválida. Sequências válidas: " + CaracteresDeEscape.SEQUENCIAS_VALIDAS);
+        throw new EstadoDeErroException("Sequência de escape: \\" + caractere + " inválida. Sequências válidas: " + CaracteresDeEscape.SEQUENCIAS_VALIDAS,
+                ((coluna, linhaAtual) -> {
+                    final int indiceFimString = linhaAtual.indexOf("\"", linhaAtual.indexOf("\"") + 1);
+                    return indiceFimString == -1 ? linhaAtual.length() - 1 : indiceFimString + 1;
+                }));
     }),
 
     S20(Token.NUM, caractere -> {

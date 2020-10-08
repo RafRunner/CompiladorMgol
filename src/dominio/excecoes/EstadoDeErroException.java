@@ -7,17 +7,17 @@ public class EstadoDeErroException extends Exception {
 
     private final TratarColuna tratarColuna;
 
+    // Implementação padrão de TratarColuna, retornar o carro (em um) para ler o caractere que quebrou a leitura do token
     public EstadoDeErroException(final String mensagem) {
-        super(mensagem);
-        tratarColuna = ((coluna, linhaAtual) -> coluna - 1 );
+        this(mensagem, ((coluna, linhaAtual) -> coluna - 1));
     }
 
-    public EstadoDeErroException(final String mensagem, final TratarColuna tratarColuna){
+    public EstadoDeErroException(final String mensagem, final TratarColuna tratarColuna) {
         super(mensagem);
         this.tratarColuna = tratarColuna;
     }
 
-    public int aplicarTratarColuna(final int coluna, final String linhaAtual){
+    public int aplicarTratarColuna(final int coluna, final String linhaAtual) {
         return tratarColuna.aplicar(coluna, linhaAtual);
     }
 }

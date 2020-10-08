@@ -30,6 +30,7 @@ public enum EstadoDFALexico {
             case ';': return values()[18];
         }
 
+        // Nesse caso a análise deve continuar do caractere após o caractere inesperado (não deve ser lido novamente)
         throw new EstadoDeErroException("Caractere inesperado: " + caractere, ((coluna, linhaAtual) -> coluna) );
     }),
 
@@ -166,6 +167,7 @@ public enum EstadoDFALexico {
             return values()[6];
         }
 
+        // Nesse caso a análise deve continuar a partir do caractere após o fim da string (depois do segundo ") ou do final da linha se a string não for fechada
         throw new EstadoDeErroException("Sequência de escape: \\" + caractere + " inválida. Sequências válidas: " + CaracteresDeEscape.SEQUENCIAS_VALIDAS,
                 ((coluna, linhaAtual) -> {
                     final int indiceFimString = linhaAtual.indexOf("\"", linhaAtual.indexOf("\"") + 1);

@@ -31,7 +31,7 @@ public enum EstadoDFALexico {
         }
 
         // Nesse caso a análise deve continuar do caractere após o caractere inesperado (não deve ser lido novamente)
-        throw new EstadoDeErroException("Caractere inesperado: " + caractere, ((coluna, linhaAtual) -> coluna) );
+        throw new EstadoDeErroException("Caractere inesperado: " + caractere, ((coluna, linhaAtual) -> coluna));
     }),
 
     S1(Token.NUM, caractere -> {
@@ -106,7 +106,6 @@ public enum EstadoDFALexico {
 
         throw new FimDeTokenValidoException("Fim de declaração de identificador");
     }),
-
 
     S9(null, caractere -> {
         if (caractere == '}') {

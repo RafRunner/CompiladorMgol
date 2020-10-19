@@ -36,8 +36,8 @@ public class Main {
         }
 
         final String nomeArquivo = args[0];
-        if (!nomeArquivo.endsWith(".mgol")) {
-            System.out.println("Formato de aquivo não suportado! Deve ser do tipo .mgol");
+        if (!nomeArquivo.toLowerCase().endsWith(".mgol") || !nomeArquivo.toLowerCase().endsWith(".alg")) {
+            System.out.println("Formato de aquivo não suportado! Deve ser do tipo .mgol ou .alg");
             return;
         }
 

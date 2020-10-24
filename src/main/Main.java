@@ -3,7 +3,7 @@ package main;
 import dominio.LeitorArquivos;
 import dominio.TokenEAtributos;
 import dominio.enums.Token;
-import partesCompilador.AnalisadorLexico;
+import partesCompilador.analisadorLexico.AnalisadorLexico;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

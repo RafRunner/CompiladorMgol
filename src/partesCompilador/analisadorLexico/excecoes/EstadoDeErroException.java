@@ -1,6 +1,6 @@
-package dominio.excecoes;
+package partesCompilador.analisadorLexico.excecoes;
 
-import dominio.interfaces.TratarColuna;
+import partesCompilador.analisadorLexico.interfaces.TratarColuna;
 
 // Exceção lançada pela função de transição de um estado do DFA não final quando o caractere lido não leva a nenhum outro estado
 public class EstadoDeErroException extends Exception {

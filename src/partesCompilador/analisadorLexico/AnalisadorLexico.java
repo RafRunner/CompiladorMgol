@@ -1,11 +1,10 @@
-package partesCompilador;
+package partesCompilador.analisadorLexico;
 
-import dominio.DFALexico;
 import dominio.Erro;
 import dominio.TokenEAtributos;
 import dominio.enums.Token;
-import dominio.excecoes.EstadoDeErroException;
-import dominio.excecoes.FimDeTokenValidoException;
+import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
+import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

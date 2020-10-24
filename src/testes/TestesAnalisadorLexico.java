@@ -1,10 +1,10 @@
 package testes;
 
-import dominio.DFALexico;
+import partesCompilador.analisadorLexico.DFALexico;
 import dominio.LeitorArquivos;
 import dominio.enums.Token;
-import dominio.excecoes.EstadoDeErroException;
-import dominio.excecoes.FimDeTokenValidoException;
+import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
+import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
 import main.Main;
 
 import java.util.List;

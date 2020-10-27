@@ -135,25 +135,25 @@ public class TestesAnalisadorLexico {
         System.out.println("Testando scan de códigos fonte e comparado com a lista de TokenEAtributo esperada. Se um teste der false falhou\n");
 
         final var tokens1 = Main.scanneaCodigoFonte(List.of("escreva \"Digite A:\";"));
-        System.out.println("1 - " + List.of(Token.escreva.criaComAtributos(),
-                Token.Literal.criaComAtributos("\"Digite A:\""),
-                Token.PT_V.criaComAtributos(";"),
-                Token.EOF.criaComAtributos("")).equals(tokens1));
+        System.out.println("1 - " + List.of(Token.escreva.darAtributos(),
+                Token.Literal.darAtributos("\"Digite A:\""),
+                Token.PT_V.darAtributos(";"),
+                Token.EOF.darAtributos("")).equals(tokens1));
 
         final var tokens2 = Main.scanneaCodigoFonte(List.of("B <- B + 3 / (A + 1);"));
-        System.out.println("2 - " + List.of(Token.id.criaComAtributos("B"),
-                Token.RCB.criaComAtributos("<-"),
-                Token.id.criaComAtributos("B"),
-                Token.OPM.criaComAtributos("+"),
-                Token.NUM.criaComAtributos("3"),
-                Token.OPM.criaComAtributos("/"),
-                Token.AB_P.criaComAtributos("("),
-                Token.id.criaComAtributos("A"),
-                Token.OPM.criaComAtributos("+"),
-                Token.NUM.criaComAtributos("1"),
-                Token.FC_P.criaComAtributos(")"),
-                Token.PT_V.criaComAtributos(";"),
-                Token.EOF.criaComAtributos("")).equals(tokens2));
+        System.out.println("2 - " + List.of(Token.id.darAtributos("B"),
+                Token.RCB.darAtributos("<-"),
+                Token.id.darAtributos("B"),
+                Token.OPM.darAtributos("+"),
+                Token.NUM.darAtributos("3"),
+                Token.OPM.darAtributos("/"),
+                Token.AB_P.darAtributos("("),
+                Token.id.darAtributos("A"),
+                Token.OPM.darAtributos("+"),
+                Token.NUM.darAtributos("1"),
+                Token.FC_P.darAtributos(")"),
+                Token.PT_V.darAtributos(";"),
+                Token.EOF.darAtributos("")).equals(tokens2));
 
         Main.scanneaCodigoFonte(LeitorArquivos.lerArquivo("res/teste.mgol"));
     }

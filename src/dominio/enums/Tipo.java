@@ -4,5 +4,5 @@ public enum Tipo {
 
     INTEIRO,
     LITERAL,
-    REAL;
+    REAL
 }

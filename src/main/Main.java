@@ -2,6 +2,7 @@ package main;
 
 import dominio.LeitorArquivos;
 import dominio.TokenEAtributos;
+import dominio.TokenLocalizado;
 import dominio.enums.Token;
 import partesCompilador.AnalisadorLexico;
 
@@ -12,13 +13,16 @@ import java.util.List;
 
 public class Main {
 
+    private final static List<String> formatosSuportados = List.of(".mgol", ".alg", ".mgl");
+    private final static String stringFormatosSuportados = String.join(" ou ", formatosSuportados);
+
     private static List<TokenEAtributos> scanneaCodigoFonte(final AnalisadorLexico analisadorLexico) {
         final List<TokenEAtributos> tokens = new ArrayList<>();
         Token tokenAtual = null;
 
         while (!Token.EOF.equals(tokenAtual)) {
-            final TokenEAtributos tokenEAtributos = analisadorLexico.lexico();
-            tokens.add(tokenEAtributos);
+            final TokenLocalizado tokenEAtributos = analisadorLexico.lexico();
+            tokens.add(tokenEAtributos.getTokenEAtributos());
             tokenAtual = tokenEAtributos.getToken();
         }
 
@@ -36,8 +40,9 @@ public class Main {
         }
 
         final String nomeArquivo = args[0];
-        if (!nomeArquivo.toLowerCase().endsWith(".mgol") || !nomeArquivo.toLowerCase().endsWith(".alg")) {
-            System.out.println("Formato de aquivo não suportado! Deve ser do tipo .mgol ou .alg");
+        // Se o arquivo não termina com nenhum dos finais suportados, é um erro
+        if (formatosSuportados.stream().noneMatch(nomeArquivo::endsWith)) {
+            System.out.println("Formato de aquivo não suportado! Deve ser do tipo " + stringFormatosSuportados);
             return;
         }
 

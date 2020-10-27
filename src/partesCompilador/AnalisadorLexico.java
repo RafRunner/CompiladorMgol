@@ -3,6 +3,7 @@ package partesCompilador;
 import dominio.DFALexico;
 import dominio.Erro;
 import dominio.TokenEAtributos;
+import dominio.TokenLocalizado;
 import dominio.enums.Token;
 import dominio.excecoes.EstadoDeErroException;
 import dominio.excecoes.FimDeTokenValidoException;
@@ -28,18 +29,18 @@ public class AnalisadorLexico {
 
     // Populando a tabela de símbolos com as palavras reservadas
     private void iniciaTabelaDeSimbolos() {
-        tabelaDeSimbolos.put(Token.inicio.toString(), Token.inicio.criaComAtributos());
-        tabelaDeSimbolos.put(Token.varinicio.toString(), Token.varinicio.criaComAtributos());
-        tabelaDeSimbolos.put(Token.varfim.toString(), Token.varfim.criaComAtributos());
-        tabelaDeSimbolos.put(Token.escreva.toString(), Token.escreva.criaComAtributos());
-        tabelaDeSimbolos.put(Token.leia.toString(), Token.leia.criaComAtributos());
-        tabelaDeSimbolos.put(Token.se.toString(), Token.se.criaComAtributos());
-        tabelaDeSimbolos.put(Token.entao.toString(), Token.entao.criaComAtributos());
-        tabelaDeSimbolos.put(Token.fimse.toString(), Token.fimse.criaComAtributos());
-        tabelaDeSimbolos.put(Token.fim.toString(), Token.fim.criaComAtributos());
-        tabelaDeSimbolos.put(Token.lit.toString(), Token.lit.criaComAtributos());
-        tabelaDeSimbolos.put(Token.inteiro.toString(), Token.inteiro.criaComAtributos());
-        tabelaDeSimbolos.put(Token.real.toString(), Token.real.criaComAtributos());
+        tabelaDeSimbolos.put(Token.inicio.toString(), Token.inicio.darAtributos());
+        tabelaDeSimbolos.put(Token.varinicio.toString(), Token.varinicio.darAtributos());
+        tabelaDeSimbolos.put(Token.varfim.toString(), Token.varfim.darAtributos());
+        tabelaDeSimbolos.put(Token.escreva.toString(), Token.escreva.darAtributos());
+        tabelaDeSimbolos.put(Token.leia.toString(), Token.leia.darAtributos());
+        tabelaDeSimbolos.put(Token.se.toString(), Token.se.darAtributos());
+        tabelaDeSimbolos.put(Token.entao.toString(), Token.entao.darAtributos());
+        tabelaDeSimbolos.put(Token.fimse.toString(), Token.fimse.darAtributos());
+        tabelaDeSimbolos.put(Token.fim.toString(), Token.fim.darAtributos());
+        tabelaDeSimbolos.put(Token.lit.toString(), Token.lit.darAtributos());
+        tabelaDeSimbolos.put(Token.inteiro.toString(), Token.inteiro.darAtributos());
+        tabelaDeSimbolos.put(Token.real.toString(), Token.real.darAtributos());
     }
 
     public AnalisadorLexico(final List<String> codigoFonte) {
@@ -47,12 +48,12 @@ public class AnalisadorLexico {
         iniciaTabelaDeSimbolos();
     }
 
-    public TokenEAtributos lexico() {
+    public TokenLocalizado lexico() {
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF
         if (linha >= codigoFonte.size()) {
-            final TokenEAtributos eof = Token.EOF.criaComAtributos("");
+            final TokenEAtributos eof = Token.EOF.darAtributos("");
             System.out.println(eof);
-            return eof;
+            return eof.localizar(linha, coluna);
         }
 
         // Adicionamos o \n (quebra de linha) no fim de cada linha para garantir que, após ler o último caractere da linha,
@@ -85,12 +86,12 @@ public class AnalisadorLexico {
             erros.add(erro);
             System.out.println(erro);
 
-            return Token.ERRO.criaComAtributos(lexema.toString());
+            return Token.ERRO.darAtributos(lexema.toString()).localizar(linha, coluna);
 
         } catch (final FimDeTokenValidoException e2) {
             coluna--;
             final Token token = DFA.getEstado().getTokenAssociado();
-            TokenEAtributos tokenEAtributos = token.criaComAtributos(lexema.toString());
+            TokenEAtributos tokenEAtributos = token.darAtributos(lexema.toString());
 
             if (token == Token.id) {
                 final TokenEAtributos tokenJaNaTabela = tabelaDeSimbolos.get(lexema.toString());
@@ -106,7 +107,7 @@ public class AnalisadorLexico {
             }
             System.out.println(tokenEAtributos);
 
-            return tokenEAtributos;
+            return tokenEAtributos.localizar(linha, coluna);
         }
     }
 

@@ -33,6 +33,10 @@ public class TokenEAtributos {
         this.tipo = tipo;
     }
 
+    public TokenLocalizado localizar(final int linha, final int coluna) {
+        return new TokenLocalizado(this, linha, coluna);
+    }
+
     @Override
     public String toString() {
         return "TokenEAtributos [ token: " + token + ", lexema: '" + lexema + "', tipo: " + tipo + " ]";

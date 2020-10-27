@@ -47,15 +47,15 @@ public enum Token {
     inteiro,
     real;
 
-    public TokenEAtributos criaComAtributos(final String lexema, final Tipo tipo) {
+    public TokenEAtributos darAtributos(final String lexema, final Tipo tipo) {
         return new TokenEAtributos(this, lexema, tipo);
     }
 
-    public TokenEAtributos criaComAtributos(final String lexema) {
+    public TokenEAtributos darAtributos(final String lexema) {
         return new TokenEAtributos(this, lexema, null);
     }
 
-    public TokenEAtributos criaComAtributos() {
+    public TokenEAtributos darAtributos() {
         return new TokenEAtributos(this, this.toString(), null);
     }
 }

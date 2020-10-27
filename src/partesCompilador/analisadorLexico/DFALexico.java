@@ -1,8 +1,7 @@
-package dominio;
+package partesCompilador.analisadorLexico;
 
-import dominio.enums.EstadoDFALexico;
-import dominio.excecoes.EstadoDeErroException;
-import dominio.excecoes.FimDeTokenValidoException;
+import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
+import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
 
 // Classe que representa o DFA léxico, guarda estado e é capaz de ler caracteres
 public class DFALexico {

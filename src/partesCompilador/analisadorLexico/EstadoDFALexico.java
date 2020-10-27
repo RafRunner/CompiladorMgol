@@ -1,9 +1,10 @@
-package dominio.enums;
+package partesCompilador.analisadorLexico;
 
 import dominio.CaracteresDeEscape;
-import dominio.excecoes.EstadoDeErroException;
-import dominio.excecoes.FimDeTokenValidoException;
-import dominio.interfaces.FuncaoTransicao;
+import dominio.enums.Token;
+import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
+import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
+import partesCompilador.analisadorLexico.interfaces.FuncaoTransicao;
 
 // Enum dos possiveis estados do DFA, se o token associado é null, não é estado final, caso contrário é
 public enum EstadoDFALexico {

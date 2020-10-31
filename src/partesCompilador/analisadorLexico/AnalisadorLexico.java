@@ -47,7 +47,7 @@ public class AnalisadorLexico {
         iniciaTabelaDeSimbolos();
     }
 
-    public TokenLocalizado lexico() {
+    public TokenLocalizado lerProximoToken() {
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF
         if (linha >= codigoFonte.size()) {
             final TokenEAtributos eof = Token.EOF.darAtributos("");
@@ -67,7 +67,7 @@ public class AnalisadorLexico {
                 if (coluna >= linhaAtual.length()) {
                     linha++;
                     coluna = 0;
-                    return lexico();
+                    return lerProximoToken();
                 }
                 final char caractereAtual = linhaAtual.charAt(coluna);
                 coluna++;

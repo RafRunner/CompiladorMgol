@@ -21,7 +21,7 @@ public class Main {
         Token tokenAtual = null;
 
         while (!Token.EOF.equals(tokenAtual)) {
-            final TokenLocalizado tokenEAtributos = analisadorLexico.lexico();
+            final TokenLocalizado tokenEAtributos = analisadorLexico.lerProximoToken();
             tokens.add(tokenEAtributos.getTokenEAtributos());
             tokenAtual = tokenEAtributos.getToken();
         }

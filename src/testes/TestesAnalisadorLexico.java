@@ -138,7 +138,7 @@ public class TestesAnalisadorLexico {
         System.out.println("1 - " + List.of(Token.escreva.darAtributos(),
                 Token.Literal.darAtributos("\"Digite A:\""),
                 Token.PT_V.darAtributos(";"),
-                Token.EOF.darAtributos("")).equals(tokens1));
+                Token.EOF.darAtributos("")).equals(tokens1) + "\n\n");
 
         final var tokens2 = Main.scanneaCodigoFonte(List.of("B <- B + 3 / (A + 1);"));
         System.out.println("2 - " + List.of(Token.id.darAtributos("B"),
@@ -153,7 +153,10 @@ public class TestesAnalisadorLexico {
                 Token.NUM.darAtributos("1"),
                 Token.FC_P.darAtributos(")"),
                 Token.PT_V.darAtributos(";"),
-                Token.EOF.darAtributos("")).equals(tokens2));
+                Token.EOF.darAtributos("")).equals(tokens2) + "\n\n");
+
+        Main.scanneaCodigoFonte(List.of("inicio", "     @", "\"string com erro \\y\"", "34ed12", "23.oi", "fim"));
+        System.out.println("\n\n");
 
         Main.scanneaCodigoFonte(LeitorArquivos.lerArquivo("res/teste.mgol"));
     }

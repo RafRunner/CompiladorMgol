@@ -1,5 +1,8 @@
 package testes;
 
+import dominio.TokenEAtributos;
+import dominio.TokenLocalizado;
+import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorLexico.DFALexico;
 import dominio.LeitorArquivos;
 import dominio.enums.Token;
@@ -7,9 +10,24 @@ import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
 import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
 import main.Main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestesAnalisadorLexico {
+
+    private static List<TokenEAtributos> scanneaCodigoFonte(final List<String> codigoFonte) {
+        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte);
+        final List<TokenEAtributos> tokens = new ArrayList<>();
+        Token tokenAtual = null;
+
+        while (!Token.EOF.equals(tokenAtual)) {
+            final TokenLocalizado tokenEAtributos = analisadorLexico.lerProximoToken();
+            tokens.add(tokenEAtributos.getTokenEAtributos());
+            tokenAtual = tokenEAtributos.getToken();
+        }
+
+        return tokens;
+    }
 
     private static void aplicaSequenciaAoDFA(final DFALexico DFA, final String sequencia) throws EstadoDeErroException, FimDeTokenValidoException {
         DFA.resetar();
@@ -134,13 +152,13 @@ public class TestesAnalisadorLexico {
         System.out.println("\n---------------------------------Testes do Analisador Lexico----------------------------------------------\n");
         System.out.println("Testando scan de códigos fonte e comparado com a lista de TokenEAtributo esperada. Se um teste der false falhou\n");
 
-        final var tokens1 = Main.scanneaCodigoFonte(List.of("escreva \"Digite A:\";"));
+        final var tokens1 = scanneaCodigoFonte(List.of("escreva \"Digite A:\";"));
         System.out.println("1 - " + List.of(Token.escreva.darAtributos(),
                 Token.Literal.darAtributos("\"Digite A:\""),
                 Token.PT_V.darAtributos(";"),
                 Token.EOF.darAtributos("")).equals(tokens1) + "\n\n");
 
-        final var tokens2 = Main.scanneaCodigoFonte(List.of("B <- B + 3 / (A + 1);"));
+        final var tokens2 = scanneaCodigoFonte(List.of("B <- B + 3 / (A + 1);"));
         System.out.println("2 - " + List.of(Token.id.darAtributos("B"),
                 Token.RCB.darAtributos("<-"),
                 Token.id.darAtributos("B"),
@@ -155,9 +173,9 @@ public class TestesAnalisadorLexico {
                 Token.PT_V.darAtributos(";"),
                 Token.EOF.darAtributos("")).equals(tokens2) + "\n\n");
 
-        Main.scanneaCodigoFonte(List.of("inicio", "     @", "\"string com erro \\y\"", "34ed12", "23.oi", "fim"));
+        scanneaCodigoFonte(List.of("inicio", "     @", "\"string com erro \\y\"", "34ed12", "23.oi", "fim"));
         System.out.println("\n\n");
 
-        Main.scanneaCodigoFonte(LeitorArquivos.lerArquivo("res/teste.mgol"));
+        scanneaCodigoFonte(LeitorArquivos.lerArquivo("res/teste.mgol"));
     }
 }

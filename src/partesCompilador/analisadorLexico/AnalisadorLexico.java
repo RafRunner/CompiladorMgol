@@ -26,6 +26,8 @@ public class AnalisadorLexico {
     private int linha = 0;
     private int coluna = 0;
 
+    private final boolean verboso;
+
     // Populando a tabela de símbolos com as palavras reservadas
     private void iniciaTabelaDeSimbolos() {
         tabelaDeSimbolos.put(Token.inicio.toString(), Token.inicio.darAtributos());
@@ -42,16 +44,23 @@ public class AnalisadorLexico {
         tabelaDeSimbolos.put(Token.real.toString(), Token.real.darAtributos());
     }
 
-    public AnalisadorLexico(final List<String> codigoFonte) {
+    public AnalisadorLexico(final List<String> codigoFonte, final boolean verboso) {
         this.codigoFonte = codigoFonte;
+        this.verboso = verboso;
         iniciaTabelaDeSimbolos();
+    }
+
+    public AnalisadorLexico(final List<String> codigoFonte) {
+        this(codigoFonte, true);
     }
 
     public TokenLocalizado lerProximoToken() {
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF
         if (linha >= codigoFonte.size()) {
             final TokenEAtributos eof = Token.EOF.darAtributos("");
-            System.out.println(eof);
+            if (verboso) {
+                System.out.println(eof);
+            }
             return eof.localizar(linha, coluna);
         }
 
@@ -83,7 +92,9 @@ public class AnalisadorLexico {
             final Erro erro = new Erro(e1.getMessage(), linha + 1, coluna);
             coluna = e1.aplicarTratarColuna(coluna,linhaAtual);
             erros.add(erro);
-            System.out.println(erro);
+            if (verboso) {
+                System.out.println(erro);
+            }
 
             return Token.ERRO.darAtributos(lexema.toString()).localizar(linha, coluna);
 
@@ -104,7 +115,9 @@ public class AnalisadorLexico {
                     tabelaDeSimbolos.put(lexema.toString(), tokenEAtributos);
                 }
             }
-            System.out.println(tokenEAtributos);
+            if (verboso) {
+                System.out.println(tokenEAtributos);
+            }
 
             return tokenEAtributos.localizar(linha, coluna);
         }

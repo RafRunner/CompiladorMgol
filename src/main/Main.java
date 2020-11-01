@@ -1,13 +1,10 @@
 package main;
 
 import dominio.LeitorArquivos;
-import dominio.TokenEAtributos;
-import dominio.TokenLocalizado;
-import dominio.enums.Token;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
+import partesCompilador.analisadorSintatico.AnalisadorSintatico;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,23 +12,6 @@ public class Main {
 
     private final static List<String> formatosSuportados = List.of(".mgol", ".alg", ".mgl");
     private final static String stringFormatosSuportados = String.join(" ou ", formatosSuportados);
-
-    private static List<TokenEAtributos> scanneaCodigoFonte(final AnalisadorLexico analisadorLexico) {
-        final List<TokenEAtributos> tokens = new ArrayList<>();
-        Token tokenAtual = null;
-
-        while (!Token.EOF.equals(tokenAtual)) {
-            final TokenLocalizado tokenEAtributos = analisadorLexico.lerProximoToken();
-            tokens.add(tokenEAtributos.getTokenEAtributos());
-            tokenAtual = tokenEAtributos.getToken();
-        }
-
-        return tokens;
-    }
-
-    public static List<TokenEAtributos> scanneaCodigoFonte(final List<String> codigoFonte) {
-        return scanneaCodigoFonte(new AnalisadorLexico(codigoFonte));
-    }
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -55,8 +35,8 @@ public class Main {
             return;
         }
 
-        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte);
-        scanneaCodigoFonte(analisadorLexico);
-        System.out.println("\n" + analisadorLexico.tabelaDeSimbolosToString());
+        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, false);
+        final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico);
+        analisadorSintatico.analisa();
     }
 }

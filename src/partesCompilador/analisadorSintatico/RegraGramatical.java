@@ -57,6 +57,6 @@ public enum RegraGramatical {
 
     @Override
     public String toString() {
-        return ladoEsquedo.toString() + "->" + ladoDireito.stream().map(Objects::toString).collect(Collectors.joining(" "));
+        return (ordinal() + 1) + ") " + ladoEsquedo.toString() + "->" + ladoDireito.stream().map(Objects::toString).collect(Collectors.joining(" "));
     }
 }

@@ -22,7 +22,7 @@ public class AnalisadorSintatico {
     }
 
     public void analisa() {
-        TokenLocalizado tokenAtual = analisadorLexico.lerProximoToken();
+        TokenLocalizado tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
 
         while (true) {
             final Integer estado = pilhaEstados.peek();
@@ -32,7 +32,7 @@ public class AnalisadorSintatico {
                 final Integer novoEstado = ((Shift) action).getEstado();
 
                 pilhaEstados.push(novoEstado);
-                tokenAtual = analisadorLexico.lerProximoToken();
+                tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
             }
 
             else if (action instanceof Reduce) {

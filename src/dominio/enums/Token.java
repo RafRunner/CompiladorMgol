@@ -11,7 +11,7 @@ public enum Token {
     // Palavra reservada
     varfim,
     // Ponto e vírgula
-    PT_V,
+    pt_v,
     // Identificador
     id,
     // Palavra reservada
@@ -25,33 +25,33 @@ public enum Token {
     // Palavra reservada
     escreva,
     // Uma Sting
-    Literal,
+    literal,
     // Um número (real ou inteiro)
-    NUM,
+    num,
     // Atribuição
-    RCB,
+    rcb,
     // Operadores aritméticos
-    OPM,
+    opm,
     // Palavra reservada
     se,
     // Palavra reservada
     entao,
     // Operadores relacionais
-    OPR,
+    opr,
     // Palavra reservada
     fimse,
     // Palavra reservada
     fim,
     // Abre parênteses
-    AB_P,
+    ab_p,
     // Fecha parênteses
-    FC_P,
+    fc_p,
     // Fim do arquivo
-    EOF,
+    eof,
 
     // Ficam no final pois são ignorados pelo analisador sintático e não estão na tabela sintática
-    Comentario,
-    ERRO;
+    comentario,
+    erro;
 
     public TokenEAtributos darAtributos(final String lexema, final Tipo tipo) {
         return new TokenEAtributos(this, lexema, tipo);

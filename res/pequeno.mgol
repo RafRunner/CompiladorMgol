@@ -4,6 +4,10 @@ inicio
         B inteiro;
     varfim;
 
-    escreva "Digite B";
-    leia B;
+    se (B < 3)
+    entao
+        escreva"3";
+
+    B<-B+1;
+    fimse
 fim

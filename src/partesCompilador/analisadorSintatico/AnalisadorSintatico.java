@@ -10,12 +10,11 @@ import java.util.Deque;
 public class AnalisadorSintatico {
 
     private final Deque<Integer> pilhaEstados = new ArrayDeque<>();
+    final private TabelaSintatica tabelaSintatica = new TabelaSintatica();
     final private AnalisadorLexico analisadorLexico;
-    final private TabelaSintatica tabelaSintatica;
 
     public AnalisadorSintatico(final AnalisadorLexico analisadorLexico) {
         this.analisadorLexico = analisadorLexico;
-        this.tabelaSintatica = new TabelaSintatica();
 
         // A pilha começa com o estado 0
         pilhaEstados.push(0);
@@ -49,12 +48,15 @@ public class AnalisadorSintatico {
             }
 
             else if (action instanceof Accept) {
+                System.out.println(RegraGramatical.r01);
                 break;
             }
 
             // Erro! Entrando na recuperação de erro
             else {
-                System.out.println("Rotina de erro não implementada!");
+                System.out.println("\nRotina de erro não implementada!");
+                System.out.println("Útimo token lido: " + tokenAtual);
+                System.out.println("Estado atual: " + estado);
                 break;
             }
         }

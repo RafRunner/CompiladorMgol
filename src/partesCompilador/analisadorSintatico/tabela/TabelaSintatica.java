@@ -46,12 +46,6 @@ public class TabelaSintatica {
 
     public Integer Goto(final Integer estado, final NaoTerminal naoTerminal) {
         final String stringGoto = tabelaGoto.get(estado + 1).get(naoTerminal.ordinal());
-
-        // Erro
-        if (stringGoto.equals(" ")) {
-            return null;
-        }
-
         return Integer.parseInt(stringGoto);
     }
 }

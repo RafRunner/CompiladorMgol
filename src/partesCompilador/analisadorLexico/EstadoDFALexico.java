@@ -35,7 +35,7 @@ public enum EstadoDFALexico {
         throw new EstadoDeErroException("Caractere inesperado: " + caractere, ((coluna, linhaAtual) -> coluna));
     }),
 
-    S1(Token.NUM, caractere -> {
+    S1(Token.num, caractere -> {
         if (Character.isDigit(caractere)) {
             return values()[1];
         }
@@ -56,7 +56,7 @@ public enum EstadoDFALexico {
         throw new EstadoDeErroException("Erro ao definir constante numérica. Esperado: dígito, lido: " + caractere);
     }),
 
-    S3(Token.NUM, caractere -> {
+    S3(Token.num, caractere -> {
         if (Character.isDigit(caractere)) {
             return values()[3];
         }
@@ -96,7 +96,7 @@ public enum EstadoDFALexico {
         return values()[6];
     }),
 
-    S7(Token.Literal, caractere -> {
+    S7(Token.literal, caractere -> {
         throw new FimDeTokenValidoException("Fim de declaração de constante literal");
     }),
 
@@ -116,15 +116,15 @@ public enum EstadoDFALexico {
         return values()[9];
     }),
 
-    S10(Token.Comentario, caractere -> {
+    S10(Token.comentario, caractere -> {
         throw new FimDeTokenValidoException("Fim de comentário");
     }),
 
-    S11(Token.OPR, caractere -> {
+    S11(Token.opr, caractere -> {
         throw new FimDeTokenValidoException("Fim de operador relacional");
     }),
 
-    S12(Token.OPR, caractere -> {
+    S12(Token.opr, caractere -> {
         if (caractere == '=') {
             return values()[11];
         }
@@ -132,7 +132,7 @@ public enum EstadoDFALexico {
         throw new FimDeTokenValidoException("Fim de operador relacional");
     }),
 
-    S13(Token.OPR, caractere -> {
+    S13(Token.opr, caractere -> {
         switch (caractere) {
             case '=':
             case '>': return values()[11];
@@ -142,23 +142,23 @@ public enum EstadoDFALexico {
         throw new FimDeTokenValidoException("Fim de operador relacional");
     }),
 
-    S14(Token.OPM, caractere -> {
+    S14(Token.opm, caractere -> {
         throw new FimDeTokenValidoException("Fim de operador aritmético");
     }),
 
-    S15(Token.RCB, caractere -> {
+    S15(Token.rcb, caractere -> {
         throw new FimDeTokenValidoException("Fim de operador de atribuição");
     }),
 
-    S16(Token.AB_P, caractere -> {
+    S16(Token.ab_p, caractere -> {
         throw new FimDeTokenValidoException("Fim de abre parênteses");
     }),
 
-    S17(Token.FC_P, caractere -> {
+    S17(Token.fc_p, caractere -> {
         throw new FimDeTokenValidoException("Fim de fecha parênteses");
     }),
 
-    S18(Token.PT_V, caractere -> {
+    S18(Token.pt_v, caractere -> {
         throw new FimDeTokenValidoException("Fim de ponto e vírgula");
     }),
 
@@ -175,7 +175,7 @@ public enum EstadoDFALexico {
                 }));
     }),
 
-    S20(Token.NUM, caractere -> {
+    S20(Token.num, caractere -> {
         if (Character.isDigit(caractere)) {
             return values()[20];
         }

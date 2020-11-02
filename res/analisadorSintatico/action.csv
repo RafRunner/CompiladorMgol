@@ -1,4 +1,4 @@
-,inicio,varinicio,varfim,PT_V,id,inteiro,real,lit,leia,escreva,Literal,NUM,RCB,OPM,se,entao,OPR,fimse,fim,AB_P,FC_P,EOF
+,inicio,varinicio,varfim,pt_v,id,inteiro,real,lit,leia,escreva,Literal,num,rcb,opm,se,entao,opr,fimse,fim,ab_p,fc_p,eof
 0,S2, , , , , , , , , , , , , , , , , , , , , 
 1, , , , , , , , , , , , , , , , , , , , , ,ACC
 2, ,S4, , , , , , , , , , , , , , , , , , , , 
@@ -42,7 +42,7 @@
 40, , , ,R8, , , , , , , , , , , , , , , , , , 
 41, , , ,R9, , , , , , , , , , , , , , , , , , 
 42, , , ,S52, , , , , , , , , , , , , , , , , , 
-43, , , ,R19, , , , , , , , , , , , ,S53, , , , , 
+43, , , ,R19, , , , , , , , , ,S53, , , , , , , ,
 44, , , ,R20, , , , , , , , , ,R20, , ,R20, , , ,R20, 
 45, , , ,R21, , , , , , , , , ,R21, , ,R21, , , ,R21, 
 46, , , , ,R26, , , ,R26,R26, , , , ,R26, , ,R26,R26, , , 

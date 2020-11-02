@@ -57,7 +57,7 @@ public class AnalisadorLexico {
     public TokenLocalizado lerProximoTokenNaoComentario() {
         TokenLocalizado tokenLocalizado = lerProximoToken();
         
-        while (tokenLocalizado.getToken().equals(Token.Comentario)) {
+        while (tokenLocalizado.getToken().equals(Token.comentario)) {
             tokenLocalizado = lerProximoToken();
         }
         
@@ -67,7 +67,7 @@ public class AnalisadorLexico {
     public TokenLocalizado lerProximoToken() {
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF
         if (linha >= codigoFonte.size()) {
-            final TokenEAtributos eof = Token.EOF.darAtributos("");
+            final TokenEAtributos eof = Token.eof.darAtributos("");
             if (verboso) {
                 System.out.println(eof);
             }
@@ -104,7 +104,7 @@ public class AnalisadorLexico {
             erros.add(erro);
             System.out.println(erro);
 
-            return Token.ERRO.darAtributos(lexema.toString()).localizar(linha, coluna);
+            return Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);
 
         } catch (final FimDeTokenValidoException e2) {
             coluna--;

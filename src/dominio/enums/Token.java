@@ -48,10 +48,11 @@ public enum Token {
     fc_p,
     // Fim do arquivo
     eof,
+    // Erro
+    erro,
 
     // Ficam no final pois são ignorados pelo analisador sintático e não estão na tabela sintática
-    comentario,
-    erro;
+    comentario;
 
     public TokenEAtributos darAtributos(final String lexema, final Tipo tipo) {
         return new TokenEAtributos(this, lexema, tipo);

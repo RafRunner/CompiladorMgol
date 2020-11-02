@@ -1,13 +1,11 @@
 package partesCompilador.analisadorLexico;
 
-import dominio.Erro;
 import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
 import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +16,6 @@ public class AnalisadorLexico {
     private final List<String> codigoFonte;
     // A tabela de símbolos representada como um Mapa (HashMap) que leva de lexema (String) à TokenEAtributos
     private final Map<String, TokenEAtributos> tabelaDeSimbolos = new HashMap<>();
-
-    private final List<Erro> erros = new ArrayList<>();
 
     private final DFALexico DFA = new DFALexico();
 
@@ -57,7 +53,7 @@ public class AnalisadorLexico {
     public TokenLocalizado lerProximoTokenNaoComentario() {
         TokenLocalizado tokenLocalizado = lerProximoToken();
         
-        while (tokenLocalizado.getToken().equals(Token.comentario)) {
+        while (tokenLocalizado.getToken() == Token.comentario) {
             tokenLocalizado = lerProximoToken();
         }
         
@@ -99,12 +95,14 @@ public class AnalisadorLexico {
             }
 
         } catch (final EstadoDeErroException e1) {
-            final Erro erro = new Erro(e1.getMessage(), linha + 1, coluna);
-            coluna = e1.aplicarTratarColuna(coluna,linhaAtual);
-            erros.add(erro);
-            System.out.println(erro);
+            System.out.printf("Erro na linha %d coluna %d: %s\n", linha + 1, coluna, e1.getMessage());
 
-            return Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);
+            lexema.append(linhaAtual.charAt(coluna - 1));
+            TokenLocalizado tokenErro = Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);
+
+            coluna = e1.aplicarTratarColuna(coluna, linhaAtual);
+
+            return tokenErro;
 
         } catch (final FimDeTokenValidoException e2) {
             coluna--;
@@ -133,10 +131,6 @@ public class AnalisadorLexico {
 
     public Map<String, TokenEAtributos> getTabelaDeSimbolos() {
         return tabelaDeSimbolos;
-    }
-
-    public List<Erro> getErros() {
-        return erros;
     }
 
     public String tabelaDeSimbolosToString() {

@@ -49,6 +49,7 @@ public class AnalisadorSintatico {
 
             else if (action instanceof Accept) {
                 System.out.println(RegraGramatical.r01);
+                System.out.println("\nPrograma sem erros sintáticos!");
                 break;
             }
 

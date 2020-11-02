@@ -45,6 +45,6 @@ public class TokenLocalizado {
 
     @Override
     public String toString() {
-        return tokenEAtributos.toString() + ", linha: " + (linha + 1) + ", coluna: " + (coluna + 1);
+        return tokenEAtributos.toString() + ", linha: " + (linha + 1) + ", coluna: " + coluna;
     }
 }

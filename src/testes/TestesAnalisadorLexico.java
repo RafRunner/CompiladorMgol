@@ -19,7 +19,7 @@ public class TestesAnalisadorLexico {
         final List<TokenEAtributos> tokens = new ArrayList<>();
         Token tokenAtual = null;
 
-        while (!Token.eof.equals(tokenAtual)) {
+        while (Token.eof != tokenAtual) {
             final TokenLocalizado tokenEAtributos = analisadorLexico.lerProximoToken();
             tokens.add(tokenEAtributos.getTokenEAtributos());
             tokenAtual = tokenEAtributos.getToken();

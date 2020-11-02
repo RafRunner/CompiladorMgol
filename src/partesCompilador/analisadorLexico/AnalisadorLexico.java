@@ -95,7 +95,7 @@ public class AnalisadorLexico {
             }
 
         } catch (final EstadoDeErroException e1) {
-            System.out.printf("Erro na linha %d coluna %d: %s\n", linha + 1, coluna, e1.getMessage());
+            System.out.printf("Erro léxico na linha %d coluna %d: %s\n", linha + 1, coluna, e1.getMessage());
 
             lexema.append(linhaAtual.charAt(coluna - 1));
             TokenLocalizado tokenErro = Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);

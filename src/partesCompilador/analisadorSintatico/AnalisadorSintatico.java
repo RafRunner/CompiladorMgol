@@ -1,6 +1,7 @@
 package partesCompilador.analisadorSintatico;
 
 import dominio.TokenLocalizado;
+import dominio.enums.Token;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSintatico.tabela.*;
 
@@ -49,15 +50,16 @@ public class AnalisadorSintatico {
 
             else if (action instanceof Accept) {
                 System.out.println(RegraGramatical.r01);
-                System.out.println("\nPrograma sem erros sintáticos!");
                 break;
             }
 
             // Erro! Entrando na recuperação de erro
             else {
-                System.out.println("\nRotina de erro não implementada!");
-                System.out.println("Útimo token lido: " + tokenAtual);
-                System.out.println("Estado atual: " + estado);
+                if (tokenAtual.getToken() != Token.erro) {
+                    System.out.printf("\nErro sintático em: \"%s\" próximo da linha %d coluna %d\n",
+                            tokenAtual.getLexema(), tokenAtual.getLinha() + 1, tokenAtual.getColuna());
+                }
+
                 break;
             }
         }

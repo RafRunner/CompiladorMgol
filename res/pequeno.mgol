@@ -4,11 +4,12 @@ inicio
         B inteiro;
     varfim;
 
+    B<-B*varfim;
+
     se (B < 3)
     entao
         escreva"3";
 
     B<-B+1;
     fimse
-    23.ew
 fim

@@ -4,12 +4,15 @@ inicio
         B inteiro;
     varfim;
 
-    B<-B*varfim;
+    ABACATE<-ABACATE*varfim;
+
+    @;
+
+    A<-@;
 
     se (B < 3)
     entao
         escreva"3";
-
-    B<-B+1;
+        B<-B+1;
     fimse
 fim

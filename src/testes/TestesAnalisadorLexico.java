@@ -155,7 +155,7 @@ public class TestesAnalisadorLexico {
         System.out.println("1 - " + List.of(Token.escreva.darAtributos(),
                 Token.literal.darAtributos("\"Digite A:\""),
                 Token.pt_v.darAtributos(";"),
-                Token.eof.darAtributos("")).equals(tokens1) + "\n\n");
+                Token.eof.darAtributos("eof (fim de arquivo)")).equals(tokens1) + "\n\n");
 
         final var tokens2 = scanneaCodigoFonte(List.of("B <- B + 3 / (A + 1);"));
         System.out.println("2 - " + List.of(Token.id.darAtributos("B"),
@@ -170,7 +170,7 @@ public class TestesAnalisadorLexico {
                 Token.num.darAtributos("1"),
                 Token.fc_p.darAtributos(")"),
                 Token.pt_v.darAtributos(";"),
-                Token.eof.darAtributos("")).equals(tokens2) + "\n\n");
+                Token.eof.darAtributos("eof (fim de arquivo)")).equals(tokens2) + "\n\n");
 
         scanneaCodigoFonte(List.of("inicio", "     @", "\"string com erro \\y\"", "34ed12", "23.oi", "fim"));
         System.out.println("\n\n");

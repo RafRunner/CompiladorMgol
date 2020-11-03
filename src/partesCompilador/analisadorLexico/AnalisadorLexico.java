@@ -67,7 +67,7 @@ public class AnalisadorLexico {
     public TokenLocalizado lerProximoToken() {
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF
         if (linha >= codigoFonte.size()) {
-            final TokenEAtributos eof = Token.eof.darAtributos("");
+            final TokenEAtributos eof = Token.eof.darAtributos("eof (fim de arquivo)");
             if (verboso) {
                 System.out.println(eof);
             }
@@ -104,7 +104,7 @@ public class AnalisadorLexico {
             erros.add(erro);
 
             lexema.append(linhaAtual.charAt(coluna - 1));
-            TokenLocalizado tokenErro = Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);
+            final TokenLocalizado tokenErro = Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);
 
             coluna = e1.aplicarTratarColuna(coluna, linhaAtual);
 

@@ -1,10 +1,12 @@
 package main;
 
+import dominio.Erro;
 import dominio.LeitorArquivos;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSintatico.AnalisadorSintatico;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,7 +37,9 @@ public class Main {
             return;
         }
 
-        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, false);
+        final List<Erro> erros = new ArrayList<>();
+
+        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, erros,false);
         final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico);
         analisadorSintatico.analisa();
     }

@@ -1,5 +1,6 @@
 package partesCompilador.analisadorLexico;
 
+import dominio.Erro;
 import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
 import dominio.enums.Token;
@@ -16,6 +17,8 @@ public class AnalisadorLexico {
     private final List<String> codigoFonte;
     // A tabela de símbolos representada como um Mapa (HashMap) que leva de lexema (String) à TokenEAtributos
     private final Map<String, TokenEAtributos> tabelaDeSimbolos = new HashMap<>();
+
+    private final List<Erro> erros;
 
     private final DFALexico DFA = new DFALexico();
 
@@ -40,14 +43,15 @@ public class AnalisadorLexico {
         tabelaDeSimbolos.put(Token.real.toString(), Token.real.darAtributos());
     }
 
-    public AnalisadorLexico(final List<String> codigoFonte, final boolean verboso) {
+    public AnalisadorLexico(final List<String> codigoFonte, List<Erro> erros, final boolean verboso) {
         this.codigoFonte = codigoFonte;
         this.verboso = verboso;
+        this.erros = erros;
         iniciaTabelaDeSimbolos();
     }
 
-    public AnalisadorLexico(final List<String> codigoFonte) {
-        this(codigoFonte, true);
+    public AnalisadorLexico(final List<String> codigoFonte, final List<Erro> erros) {
+        this(codigoFonte, erros,true);
     }
     
     public TokenLocalizado lerProximoTokenNaoComentario() {
@@ -95,7 +99,9 @@ public class AnalisadorLexico {
             }
 
         } catch (final EstadoDeErroException e1) {
-            System.out.printf("Erro léxico na linha %d coluna %d: %s\n", linha + 1, coluna, e1.getMessage());
+            final Erro erro = new Erro("Erro léxico: " + e1.getMessage(), linha + 1, coluna);
+            System.out.println("\n" + erro + "\n");
+            erros.add(erro);
 
             lexema.append(linhaAtual.charAt(coluna - 1));
             TokenLocalizado tokenErro = Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);
@@ -131,6 +137,10 @@ public class AnalisadorLexico {
 
     public Map<String, TokenEAtributos> getTabelaDeSimbolos() {
         return tabelaDeSimbolos;
+    }
+
+    public List<Erro> getErros() {
+        return erros;
     }
 
     public String tabelaDeSimbolosToString() {

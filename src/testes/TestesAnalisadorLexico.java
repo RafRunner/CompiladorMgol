@@ -15,7 +15,7 @@ import java.util.List;
 public class TestesAnalisadorLexico {
 
     private static List<TokenEAtributos> scanneaCodigoFonte(final List<String> codigoFonte) {
-        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte);
+        final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, new ArrayList<>());
         final List<TokenEAtributos> tokens = new ArrayList<>();
         Token tokenAtual = null;
 

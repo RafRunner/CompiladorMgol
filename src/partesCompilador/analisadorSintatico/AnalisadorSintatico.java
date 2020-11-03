@@ -1,5 +1,6 @@
 package partesCompilador.analisadorSintatico;
 
+import dominio.Erro;
 import dominio.TokenLocalizado;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
@@ -7,6 +8,7 @@ import partesCompilador.analisadorSintatico.tabela.*;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 
 public class AnalisadorSintatico {
 
@@ -14,8 +16,11 @@ public class AnalisadorSintatico {
     final private TabelaSintatica tabelaSintatica = new TabelaSintatica();
     final private AnalisadorLexico analisadorLexico;
 
+    private final List<Erro> erros;
+
     public AnalisadorSintatico(final AnalisadorLexico analisadorLexico) {
         this.analisadorLexico = analisadorLexico;
+        this.erros = analisadorLexico.getErros();
 
         // A pilha começa com o estado 0
         pilhaEstados.push(0);
@@ -56,12 +61,18 @@ public class AnalisadorSintatico {
             // Erro! Entrando na recuperação de erro
             else {
                 if (tokenAtual.getToken() != Token.erro) {
-                    System.out.printf("\nErro sintático em: \"%s\" próximo da linha %d coluna %d\n",
-                            tokenAtual.getLexema(), tokenAtual.getLinha() + 1, tokenAtual.getColuna());
+                    final Erro erro = new Erro("Erro sintático. Token inesperado: \"" + tokenAtual.getLexema() + "\"",
+                            tokenAtual.getLinha() + 1, tokenAtual.getColuna());
+                    System.out.println("\n" + erro + "\n");
+                    erros.add(erro);
                 }
 
                 break;
             }
         }
+    }
+
+    public List<Erro> getErros() {
+        return erros;
     }
 }

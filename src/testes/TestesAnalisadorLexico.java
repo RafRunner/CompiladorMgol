@@ -68,10 +68,10 @@ public class TestesAnalisadorLexico {
         aplicaSequenciaAoDFA(DFA, "idetificador_com_underscore_23");
         System.out.println("9 - " + (DFA.getEstado().getTokenAssociado() == Token.id));
 
-        aplicaSequenciaAoDFA(DFA, ")");
+        aplicaSequenciaAoDFA(DFA, "(");
         System.out.println("10 - " + (DFA.getEstado().getTokenAssociado() == Token.ab_p));
 
-        aplicaSequenciaAoDFA(DFA, "(");
+        aplicaSequenciaAoDFA(DFA, ")");
         System.out.println("11 - " + (DFA.getEstado().getTokenAssociado() == Token.fc_p));
 
         aplicaSequenciaAoDFA(DFA, ";");

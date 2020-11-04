@@ -28,7 +28,7 @@ public class Main {
             return;
         }
 
-        List<String> codigoFonte;
+        final List<String> codigoFonte;
 
         try {
             codigoFonte = LeitorArquivos.lerArquivo(nomeArquivo);

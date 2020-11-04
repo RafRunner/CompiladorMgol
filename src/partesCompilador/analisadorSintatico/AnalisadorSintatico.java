@@ -46,7 +46,7 @@ public class AnalisadorSintatico {
                 if (tokenAtual.getLinha() != linhaAtual) {
                     linhaAtual = tokenAtual.getLinha();
                     pilhaLinhaAnterior.clear();
-                    for (Integer i : pilhaEstados) {
+                    for (final Integer i : pilhaEstados) {
                         pilhaLinhaAnterior.addLast(i);
                     }
                 }
@@ -90,9 +90,9 @@ public class AnalisadorSintatico {
                 tokenAtual = tokenIgnorado;
                 // Atualizando a linha
                 linhaAtual = tokenAtual.getLinha();
-                // Restaurando a pilhaDeEstados para como estava na linha anterior (antes dos erros)
+                // Restaurando a pilhaDeEstados para como estava na linha anterior (antes do erro)
                 pilhaEstados.clear();
-                for (Integer i : pilhaLinhaAnterior) {
+                for (final Integer i : pilhaLinhaAnterior) {
                     pilhaEstados.addLast(i);
                 }
             }

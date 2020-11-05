@@ -36,7 +36,7 @@ public class Main {
 
         // Se o arquivo não termina com nenhum dos finais suportados, é um erro
         if (formatosSuportados.stream().noneMatch(nomeArquivo::endsWith)) {
-            System.out.println("Formato de aquivo não suportado! Deve ser do tipo " + stringFormatosSuportados);
+            System.out.println("Formato não suportado para o arquivo: " + nomeArquivo + "! Deve ser do tipo " + stringFormatosSuportados);
             return;
         }
 

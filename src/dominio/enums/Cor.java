@@ -1,18 +1,29 @@
 package dominio.enums;
 
-public class Cor {
+public enum Cor {
 
-    public static final String RESET = "\u001B[0m";
-    public static final String BLACK = "\u001B[30m";
-    public static final String RED = "\u001B[31m";
-    public static final String GREEN = "\u001B[32m";
-    public static final String YELLOW = "\u001B[33m";
-    public static final String BLUE = "\u001B[34m";
-    public static final String PURPLE = "\u001B[35m";
-    public static final String CYAN = "\u001B[36m";
-    public static final String WHITE = "\u001B[37m";
+    RESET("\u001B[0m"),
+    BLACK("\u001B[30m"),
+    RED("\u001B[31m"),
+    GREEN("\u001B[32m"),
+    YELLOW("\u001B[33m"),
+    BLUE("\u001B[34m"),
+    PURPLE("\u001B[35m"),
+    CYAN("\u001B[36m"),
+    WHITE("\u001B[37m");
 
-    public static void imprimeComCor(final String mensagem, final String cor) {
-        System.out.println(cor + mensagem + RESET);
+    private final String codigo;
+
+    Cor(final String codigo) {
+        this.codigo = codigo;
+    }
+
+    public static void imprimeComCor(final Object mensagem, final Cor cor) {
+        System.out.println(cor.toString() + mensagem.toString() + RESET.toString());
+    }
+
+    @Override
+    public String toString() {
+        return codigo;
     }
 }

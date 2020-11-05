@@ -1,36 +1,26 @@
 package partesCompilador.analisadorLexico;
 
+import dominio.Analisador;
 import dominio.Erro;
 import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
-import dominio.enums.Cor;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
 import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class AnalisadorLexico {
+public class AnalisadorLexico extends Analisador {
 
     // O código fonte representado como uma Lista de String (linhas e colunas)
     private final List<String> codigoFonte;
     // A tabela de símbolos representada como um Mapa (HashMap) que leva de lexema (String) à TokenEAtributos
     private final Map<String, TokenEAtributos> tabelaDeSimbolos = new HashMap<>();
 
-    private final List<Erro> erros;
-
     private final DFALexico DFA = new DFALexico();
 
     private int linha = 0;
     private int coluna = 0;
-
-    // Verbosidade 0 -> não imprime nada
-    // Verbosidade 1 -> imprime erros
-    // Verbosidade 2 -> imprime tudo (erros e tokens)
-    private final int verbosidade;
 
     // Populando a tabela de símbolos com as palavras reservadas
     private void iniciaTabelaDeSimbolos() {
@@ -49,9 +39,8 @@ public class AnalisadorLexico {
     }
 
     public AnalisadorLexico(final List<String> codigoFonte, List<Erro> erros, final int verbosidade) {
+        super(erros, verbosidade);
         this.codigoFonte = codigoFonte;
-        this.verbosidade = verbosidade;
-        this.erros = erros;
         iniciaTabelaDeSimbolos();
     }
 
@@ -73,9 +62,7 @@ public class AnalisadorLexico {
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF
         if (linha >= codigoFonte.size()) {
             final TokenEAtributos eof = Token.eof.darAtributos("");
-            if (verbosidade > 1) {
-                System.out.println(eof);
-            }
+            imprimeInfo(eof);
             return eof.localizar(linha, coluna);
         }
 
@@ -104,19 +91,12 @@ public class AnalisadorLexico {
             }
 
         } catch (final EstadoDeErroException e1) {
-            final Erro erro = new Erro("Erro léxico: " + e1.getMessage(), linha + 1, coluna);
-            erros.add(erro);
-
-            if (verbosidade > 0) {
-                Cor.imprimeComCor("\n" + erro + "\n", Cor.RED);
-            }
-
             lexema.append(linhaAtual.charAt(coluna - 1));
-            final TokenLocalizado tokenErro = Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);
+            criaRegistraEImprimeErro("Erro léxico no lexema \""  + lexema + "\": " + e1.getMessage(), linha, coluna);
 
             coluna = e1.aplicarTratarColuna(coluna, linhaAtual);
 
-            return tokenErro;
+            return Token.erro.darAtributos(lexema.toString()).localizar(linha, coluna);
 
         } catch (final FimDeTokenValidoException e2) {
             coluna--;
@@ -135,9 +115,7 @@ public class AnalisadorLexico {
                     tabelaDeSimbolos.put(lexema.toString(), tokenEAtributos);
                 }
             }
-            if (verbosidade > 1) {
-                System.out.println(tokenEAtributos);
-            }
+            imprimeInfo(tokenEAtributos);
 
             return tokenEAtributos.localizar(linha, coluna);
         }
@@ -145,14 +123,6 @@ public class AnalisadorLexico {
 
     public Map<String, TokenEAtributos> getTabelaDeSimbolos() {
         return tabelaDeSimbolos;
-    }
-
-    public List<Erro> getErros() {
-        return erros;
-    }
-
-    public int getVerbosidade() {
-        return verbosidade;
     }
 
     public String tabelaDeSimbolosToString() {

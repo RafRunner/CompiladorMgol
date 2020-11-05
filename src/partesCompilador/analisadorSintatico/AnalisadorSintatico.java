@@ -18,8 +18,8 @@ public class AnalisadorSintatico {
     private final List<Erro> erros;
 
     // Verbosidade 0 -> não imprime nada
-    // Verbosidade 1 -> imprime erros
-    // Verbosidade 2 -> imprime tudo (erros e tokens)
+    // Verbosidade 1 -> imprime erros e avisos
+    // Verbosidade 2 -> imprime tudo (erros e regras de derivação)
     private final int verbosidade;
 
     public AnalisadorSintatico(final AnalisadorLexico analisadorLexico, final int verbosidade) {

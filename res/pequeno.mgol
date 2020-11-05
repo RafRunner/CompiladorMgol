@@ -4,9 +4,9 @@ inicio
         B inteiro;
     varfim;
 
-    ABACATE<-ABACATE*varfim;
+    B<- 2 * 4;
 
-    @;
+    ABACATE<-ABACATE*varfim;
 
     A<-@;
 
@@ -15,4 +15,3 @@ inicio
         escreva"3";
         B<-B+1;
     fimse
-fim

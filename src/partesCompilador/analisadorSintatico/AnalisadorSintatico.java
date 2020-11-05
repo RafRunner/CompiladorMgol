@@ -2,6 +2,7 @@ package partesCompilador.analisadorSintatico;
 
 import dominio.Erro;
 import dominio.TokenLocalizado;
+import dominio.enums.Cor;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSintatico.tabela.*;
@@ -16,9 +17,15 @@ public class AnalisadorSintatico {
 
     private final List<Erro> erros;
 
-    public AnalisadorSintatico(final AnalisadorLexico analisadorLexico) {
+    // Verbosidade 0 -> não imprime nada
+    // Verbosidade 1 -> imprime erros
+    // Verbosidade 2 -> imprime tudo (erros e tokens)
+    private final int verbosidade;
+
+    public AnalisadorSintatico(final AnalisadorLexico analisadorLexico, final int verbosidade) {
         this.analisadorLexico = analisadorLexico;
         this.erros = analisadorLexico.getErros();
+        this.verbosidade = verbosidade;
     }
 
     public void analisa() {
@@ -62,11 +69,15 @@ public class AnalisadorSintatico {
                 final Integer Goto = tabelaSintatica.Goto(pilhaEstados.peek(), regra.getLadoEsquedo());
                 pilhaEstados.push(Goto);
 
-                System.out.println(regra);
+                if (verbosidade > 1) {
+                    System.out.println(regra);
+                }
             }
 
             else if (action instanceof Accept) {
-                System.out.println(RegraGramatical.r01);
+                if (verbosidade > 1) {
+                    System.out.println(RegraGramatical.r01);
+                }
                 break;
             }
 
@@ -76,13 +87,23 @@ public class AnalisadorSintatico {
                     final Erro erro = new Erro(
                             String.format("Erro sintático: Token do tipo \"%s\" inesperado: %s", tokenAtual.getToken(), tokenAtual.getLexema()),
                             tokenAtual.getLinha() + 1, tokenAtual.getColuna());
-                    System.out.println("\n" + erro + "\n");
                     erros.add(erro);
+
+                    if (verbosidade > 0) {
+                        Cor.imprimeComCor("\n" + erro + "\n", Cor.RED);
+                    }
+                }
+
+                if (tokenAtual.getToken() == Token.eof) {
+                    if (verbosidade > 0) {
+                        Cor.imprimeComCor("Não foi possível terminar a derivação gramatical do programa devido a erros. Análise será limitada\n", Cor.YELLOW);
+                    }
+                    break;
                 }
 
                 // Vamos ignorar tokens até chegar na próxima linha e então restaurar a pilha
                 TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
-                while(tokenIgnorado.getLinha() == linhaAtual) {
+                while (tokenIgnorado.getLinha() == linhaAtual && tokenIgnorado.getToken() != Token.eof) {
                     tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
                 }
 

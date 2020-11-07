@@ -93,7 +93,7 @@ public class AnalisadorSintatico extends Analisador {
         }
     }
 
-    // Torna a pilha dest em uma cópia da pilha src
+    // Torna a pilha dest uma cópia da pilha src
     private static void copiaPilha(final Deque<Integer> dest, final Deque<Integer> src) {
         dest.clear();
         for (final Integer i : src) {

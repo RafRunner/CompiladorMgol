@@ -100,7 +100,7 @@ public class Main {
     private static void imprimeErrosOuSucesso(final List<Erro> erros, final String nomeArquivoSaida) {
         if (erros.size() != 0) {
             Cor.imprimeComCor("\nCompilação não concluída por erros. Resumo dos erros:", Cor.BLUE);
-            Cor.imprimeComCor("---------------------------------------------------------------------------------------", Cor.BLUE);
+            Cor.imprimeComCor("------------------------------------------------------------------------------------------------------", Cor.BLUE);
             for (final Erro r : erros) {
                 Cor.imprimeComCor(r.toString(), Cor.RED);
             }

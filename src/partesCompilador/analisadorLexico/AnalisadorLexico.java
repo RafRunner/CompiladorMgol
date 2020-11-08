@@ -62,7 +62,7 @@ public class AnalisadorLexico extends Analisador {
 
     public TokenLocalizado lerProximoToken() {
         if (!backLog.isEmpty()) {
-            return  backLog.pop();
+            return backLog.pop();
         }
 
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF

@@ -19,8 +19,10 @@ public enum TipoErro {
     E7(Token.entao.darAtributos(), token -> "Faltando um \"entao\" para completar a expressão se"),
 
     // Outros casos
-    E9(null, token -> "Token de id \"" + token.getLexema() + "\" solto (deveria ter atribuição)"),
-    E10(null, token -> "Argumento inaceitável para leia/escreva: \"" + token.getToken() + "\"");
+    E9(null, token -> "Token de id \"" + token.getLexema() + "\" sem atribuição"),
+    E10(null, token -> "Argumento inaceitável para leia/escreva: \"" + token.getToken() + "\""),
+    // Também deveria aceitar literais, mas está faltando na gramática e não tivemos tempo de corrigir
+    E11(null, token -> "\"" + token.getLexema() + "\" não pode ser guardado em variável. Variáveis podem receber apenas números ou ids");
 
     private interface Detalhe {
         String montaDetalhe(final TokenLocalizado token);

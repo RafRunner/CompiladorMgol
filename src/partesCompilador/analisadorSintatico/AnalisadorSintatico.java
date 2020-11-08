@@ -68,8 +68,8 @@ public class AnalisadorSintatico extends Analisador {
                     tokenAtual = Token.rcb.darAtributos("<-").localizar(-1, -1);
                 }
 
-                // Argumento inválido para leia/escreva. Simulamos um id qualquer (pegado da tabela de símbolos)
-                else if (erro.getTipo() == TipoErro.E10) {
+                // Argumento inválido para leia/escreva ou para atribuição à variável. Simulamos um id qualquer (pegado da tabela de símbolos)
+                else if (erro.getTipo() == TipoErro.E10 || erro.getTipo() == TipoErro.E11) {
                     criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAtual), tokenAnterior.getLinha(), tokenAnterior.getColuna());
                     analisadorLexico.pushToBacklog(tokenAtual);
                     final Optional<TokenEAtributos> idQualquer = analisadorLexico.getTabelaDeSimbolos().values().stream().filter(token -> token.getToken() == Token.id).findFirst();

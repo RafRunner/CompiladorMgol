@@ -1,6 +1,7 @@
 package partesCompilador.analisadorSintatico;
 
 import dominio.Analisador;
+import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
@@ -67,11 +68,12 @@ public class AnalisadorSintatico extends Analisador {
                     tokenAtual = Token.rcb.darAtributos("<-").localizar(-1, -1);
                 }
 
+                // Argumento inválido para leia/escreva. Simulamos um id qualquer (pegado da tabela de símbolos)
                 else if (erro.getTipo() == TipoErro.E10) {
                     criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAtual), tokenAnterior.getLinha(), tokenAnterior.getColuna());
                     analisadorLexico.pushToBacklog(tokenAtual);
-                    // TODO pegar um id existente na tabela de símbolos aqui, por isso não pode ficar no else abaixo
-                    tokenAtual = Token.id.darAtributos("A").localizar(-1, -1);
+                    final Optional<TokenEAtributos> idQualquer = analisadorLexico.getTabelaDeSimbolos().values().stream().filter(token -> token.getToken() == Token.id).findFirst();
+                    tokenAtual = idQualquer.orElse(Token.id.darAtributos("EU_NAO_EXISTO")).localizar(-1, -1);
                 }
 
                 // Tratamento comum para todos os casos onde assumimos que um token está faltando

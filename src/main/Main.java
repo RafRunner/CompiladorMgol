@@ -17,7 +17,11 @@ public class Main {
     private final static String regexFormatos = "\\.(" + String.join("|", formatosSuportados) + ")$";
 
     public static void main(String[] args) {
-        if (Arrays.asList(args).contains("-h") || args.length == 0) {
+        if (args.length == 0) {
+            Cor.imprimeComCor("Uso incorreto do compilador. Para ajuda use -h", Cor.RED);
+            return;
+        }
+        if (Arrays.asList(args).contains("-h")) {
             imprimeAjuda();
             return;
         }
@@ -80,7 +84,39 @@ public class Main {
     }
 
     private static void imprimeAjuda() {
-        Cor.imprimeComCor("Esse é o compilador MGOL, capaz de compilar da linguagem fictícia MGOL para C.", Cor.BLUE);
+        Cor.imprimeComCor("                                _  _             _\n" +
+                "                               (_)| |           | |\n" +
+                "  ___   ___   _ __ ___   _ __   _ | |  __ _   __| |  ___   _ __\n" +
+                " / __| / _ \\ | '_ ` _ \\ | '_ \\ | || | / _` | / _` | / _ \\ | '__|\n" +
+                "| (__ | (_) || | | | | || |_) || || || (_| || (_| || (_) || |\n" +
+                " \\___| \\___/ |_| |_| |_|| .__/ |_||_| \\__,_| \\__,_| \\___/ |_|\n" +
+                "                        | |\n" +
+                "                        |_|", Cor.YELLOW);
+
+        Cor.imprimeComCor("          _____                    _____                   _______                   _____\n" +
+                "         /\\    \\                  /\\    \\                 /::\\    \\                 /\\    \\\n" +
+                "        /::\\____\\                /::\\    \\               /::::\\    \\               /::\\____\\\n" +
+                "       /::::|   |               /::::\\    \\             /::::::\\    \\             /:::/    /\n" +
+                "      /:::::|   |              /::::::\\    \\           /::::::::\\    \\           /:::/    /\n" +
+                "     /::::::|   |             /:::/\\:::\\    \\         /:::/~~\\:::\\    \\         /:::/    /\n" +
+                "    /:::/|::|   |            /:::/  \\:::\\    \\       /:::/    \\:::\\    \\       /:::/    /\n" +
+                "   /:::/ |::|   |           /:::/    \\:::\\    \\     /:::/    / \\:::\\    \\     /:::/    /\n" +
+                "  /:::/  |::|___|______    /:::/    / \\:::\\    \\   /:::/____/   \\:::\\____\\   /:::/    /\n" +
+                " /:::/   |::::::::\\    \\  /:::/    /   \\:::\\ ___\\ |:::|    |     |:::|    | /:::/    /\n" +
+                "/:::/    |:::::::::\\____\\/:::/____/  ___\\:::|    ||:::|____|     |:::|----|/:::/____/\n" +
+                "\\::/    / ~~~~~/:::/    /\\:::\\    \\ /\\  /:::|____| \\:::\\    \\   /:::/    / \\:::\\    \\\n" +
+                " \\/____/      /:::/    /  \\:::\\    /::\\ \\::/    /   \\:::\\    \\ /:::/    /   \\:::\\    \\\n" +
+                "             /:::/    /    \\:::\\   \\:::\\ \\/____/     \\:::\\    /:::/    /     \\:::\\    \\\n" +
+                "            /:::/    /      \\:::\\   \\:::\\____\\        \\:::\\__/:::/    /       \\:::\\    \\\n" +
+                "           /:::/    /        \\:::\\  /:::/    /         \\::::::::/    /         \\:::\\    \\\n" +
+                "          /:::/    /          \\:::\\/:::/    /           \\::::::/    /           \\:::\\    \\\n" +
+                "         /:::/    /            \\::::::/    /             \\::::/    /             \\:::\\    \\\n" +
+                "        /:::/    /              \\::::/    /               \\::/____/               \\:::\\____\\\n" +
+                "        \\::/    /                \\::/____/                                         \\::/    /\n" +
+                "         \\/____/                                                                    \\/____/\n" +
+                "\n", Cor.YELLOW);
+
+        Cor.imprimeComCor("\nEsse é o compilador MGOL, capaz de compilar da linguagem fictícia MGOL para C.", Cor.BLUE);
         Cor.imprimeComCor("O último argumento do compilador deve sempre ser o caminho até o arquivo que contém o código fonte que se deseja compilar.", Cor.BLUE);
         Cor.imprimeComCor("Por padrão o compilador irá gerar o código objeto na mesma pasta onde está sendo executado com o mesmo nome do arquivo fonte.", Cor.BLUE);
 
@@ -94,7 +130,7 @@ public class Main {
 
         Cor.imprimeComCor("\n\t-o (saída): argumento para definir o caminho e nome do arquivo de saída. Ex: -o ~/Documents/saida", Cor.PURPLE);
 
-        Cor.imprimeComCor("\nFeito por: Rafael Nunes Santana e Armando Soares Neto.", Cor.GREEN);
+        Cor.imprimeComCor("\nFeito por: Rafael Nunes Santana e Armando Soares e Silva Neto.\n", Cor.GREEN);
     }
 
     private static void imprimeErrosOuSucesso(final List<Erro> erros, final String nomeArquivoSaida) {
@@ -104,9 +140,10 @@ public class Main {
             for (final Erro r : erros) {
                 Cor.imprimeComCor(r.toString(), Cor.RED);
             }
+            System.out.println();
         }
         else {
-            Cor.imprimeComCor("\nCompilação concluída com sucesso. Arquivo de saída: " + nomeArquivoSaida, Cor.BLUE);
+            Cor.imprimeComCor("\nCompilação concluída com sucesso. Arquivo de saída: " + nomeArquivoSaida + "\n", Cor.BLUE);
         }
     }
 }

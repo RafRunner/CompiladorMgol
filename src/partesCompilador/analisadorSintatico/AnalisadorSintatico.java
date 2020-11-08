@@ -39,12 +39,10 @@ public class AnalisadorSintatico extends Analisador {
             if (action instanceof ErroSintatico) {
                 final ErroSintatico erro = (ErroSintatico) action;
 
+                final TokenLocalizado tokenUsado = erro.usaAtual() ? tokenAtual : tokenAnterior;
+
                 // Entrando na recuperação de erro genérica (modo de pânico por linha)
                 if (erro.getTipo() == TipoErro.E0) {
-                    if (tokenAtual.getToken() != Token.erro) {
-                        criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAtual), tokenAtual.getLinha(), tokenAtual.getColuna());
-                    }
-
                     // Vamos ignorar tokens até chegar na próxima linha (ou em eof) e então restaurar a pilha
                     TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
                     while (tokenIgnorado.getLinha() == linhaAtual && tokenIgnorado.getToken() != Token.eof) {
@@ -61,26 +59,41 @@ public class AnalisadorSintatico extends Analisador {
 
                 // No caso de um id solto, simulamos uma atribuição a ele mesmo
                 else if (erro.getTipo() == TipoErro.E9) {
-                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAnterior), tokenAnterior.getLinha(), tokenAnterior.getColuna());
                     analisadorLexico.pushToBacklog(tokenAtual);
-                    analisadorLexico.pushToBacklog(Token.pt_v.darAtributos(";").localizar(-1, -1));
-                    analisadorLexico.pushToBacklog(tokenAnterior.getTokenEAtributos().localizar(-1, -1));
-                    tokenAtual = Token.rcb.darAtributos("<-").localizar(-1, -1);
+                    analisadorLexico.pushToBacklog(Token.pt_v.darAtributos(";").localizar(-2, -1));
+                    analisadorLexico.pushToBacklog(tokenAnterior.getTokenEAtributos().localizar(-2, -1));
+                    tokenAtual = Token.rcb.darAtributos("<-").localizar(-2, -1);
                 }
 
                 // Argumento inválido para leia/escreva. Simulamos um id qualquer (pegado da tabela de símbolos)
                 else if (erro.getTipo() == TipoErro.E10) {
-                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAtual), tokenAnterior.getLinha(), tokenAnterior.getColuna());
-                    analisadorLexico.pushToBacklog(tokenAtual);
                     final Optional<TokenEAtributos> idQualquer = analisadorLexico.getTabelaDeSimbolos().values().stream().filter(token -> token.getToken() == Token.id).findFirst();
-                    tokenAtual = idQualquer.orElse(Token.id.darAtributos("EU_NAO_EXISTO")).localizar(-1, -1);
+                    tokenAtual = idQualquer.orElse(Token.id.darAtributos("EU_NAO_EXISTO")).localizar(-2, -1);
+                }
+
+                else if (erro.getTipo() == TipoErro.E13) {
+                    final Integer temp = pilhaEstados.pop();
+                    analisadorLexico.pushToBacklog(tokenAtual);
+
+                    final TokenEAtributos token = tabelaSintatica.action(tabelaSintatica.Goto(pilhaEstados.peek(), NaoTerminal.OPRD), Token.opm) instanceof ErroSintatico ?
+                            Token.opr.darAtributos(">") : Token.opm.darAtributos("+");
+
+                    tokenAtual = token.localizar(-2, -1);
+                    pilhaEstados.push(temp);
+
+                    final String mensagem = token.getToken() == Token.opm ? "Fatando operador matemático após \"" + tokenUsado.getLexema() + "\"" : "Fatando operador lógico após \"" + tokenUsado.getLexema() + "\"";
+                    criaRegistraEImprimeErro(mensagem, tokenUsado.getLinha(), tokenUsado.getColuna());
+                    continue;
                 }
 
                 // Tratamento comum para todos os casos onde assumimos que um token está faltando
                 else {
-                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAnterior), tokenAnterior.getLinha(), tokenAnterior.getColuna());
                     analisadorLexico.pushToBacklog(tokenAtual);
                     tokenAtual = erro.getTipo().getTokenFaltando().localizar(tokenAnterior.getLinha(), tokenAnterior.getColuna());
+                }
+
+                if (tokenUsado.getToken() != Token.erro) {
+                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenUsado), tokenUsado.getLinha(), tokenUsado.getColuna());
                 }
 
                 if (tokenAtual.getToken() == Token.eof) {

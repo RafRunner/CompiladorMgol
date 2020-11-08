@@ -14,6 +14,10 @@ public class ErroSintatico extends Action {
         return tipoErro.getDetalhe(token);
     }
 
+    public boolean usaAtual() {
+        return tipoErro.usaAtual();
+    }
+
     public TipoErro getTipo() {
         return tipoErro;
     }

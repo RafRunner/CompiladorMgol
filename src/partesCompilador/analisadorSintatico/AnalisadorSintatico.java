@@ -71,6 +71,8 @@ public class AnalisadorSintatico extends Analisador {
                     tokenAtual = idQualquer.orElse(Token.id.darAtributos("EU_NAO_EXISTO")).localizar(-2, -1);
                 }
 
+                // Caso onde falta um opm ou opr. Nesse caso sempre sabemos que vamos fazer a redução pela regra 20 ou 21, então forçamos essa redução
+                // e depois verificamos a action com opm. Se for erro sabemos que deveria ser um opr, caso contrário deixamos opr.
                 else if (erro.getTipo() == TipoErro.E13) {
                     final Integer temp = pilhaEstados.pop();
                     analisadorLexico.pushToBacklog(tokenAtual);

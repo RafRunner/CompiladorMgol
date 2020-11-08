@@ -25,6 +25,8 @@ public class AnalisadorSintatico extends Analisador {
         // Iniciando variáveis axiliares para o tratamento de erro
         int linhaAtual = tokenAtual.getLinha();
         final Deque<Integer> pilhaLinhaAnterior = new ArrayDeque<>();
+        boolean lerProximoToken;
+        TokenLocalizado tokenAnterior = tokenAtual;
 
         // A pilha começa com o estado 0
         pilhaEstados.push(0);
@@ -32,13 +34,59 @@ public class AnalisadorSintatico extends Analisador {
 
         while (true) {
             final Integer estado = pilhaEstados.peek();
-            final Action action = tabelaSintatica.action(estado, tokenAtual.getToken());
+            Action action = tabelaSintatica.action(estado, tokenAtual.getToken());
+            lerProximoToken = true;
+
+            if (action instanceof ErroSintatico) {
+                final ErroSintatico erro = (ErroSintatico) action;
+                final int linhaErro;
+                final int colunaErro;
+
+                // Faltando ponto e vírgula. Substituíndo a action pela action que seria gerada pelo ; e não lendo o próximo
+                if (erro.getTipoErro() == TipoErro.E1) {
+                    lerProximoToken = false;
+                    linhaErro = tokenAnterior.getLinha();
+                    colunaErro = tokenAnterior.getColuna();
+                    action = tabelaSintatica.action(estado, Token.pt_v);
+                }
+
+                // Entrando na recuperação de erro genérica (modo de pânico por linha)
+                else {
+                    linhaErro = tokenAtual.getLinha();
+                    colunaErro = tokenAtual.getColuna();
+
+                    // Vamos ignorar tokens até chegar na próxima linha (ou em eof) e então restaurar a pilha
+                    TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
+                    while (tokenIgnorado.getLinha() == linhaAtual && tokenIgnorado.getToken() != Token.eof) {
+                        tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
+                    }
+
+                    // O token a ser analisado é o primeiro da nova linha
+                    tokenAtual = tokenIgnorado;
+                    // Atualizando a linha
+                    linhaAtual = tokenAtual.getLinha();
+                    // Restaurando a pilhaDeEstados para como estava na linha anterior (antes do erro)
+                    copiaPilha(pilhaEstados, pilhaLinhaAnterior);
+                }
+
+                if (tokenAtual.getToken() != Token.erro) {
+                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAtual), linhaErro, colunaErro);
+                }
+
+                if (tokenAtual.getToken() == Token.eof) {
+                    imprimeAviso("Não foi possível terminar a derivação gramatical do programa devido a erros. Análise será limitada");
+                    break;
+                }
+            }
 
             if (action instanceof Shift) {
                 final Integer novoEstado = ((Shift) action).getEstado();
                 pilhaEstados.push(novoEstado);
 
-                tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
+                if (lerProximoToken) {
+                    tokenAnterior = tokenAtual;
+                    tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
+                }
 
                 // Salvando o pilha da linha anterior antes de ir para a nova linha que pode conter erros (a linha será ignorada se tiver)
                 if (tokenAtual.getLinha() != linhaAtual) {
@@ -63,32 +111,6 @@ public class AnalisadorSintatico extends Analisador {
             else if (action instanceof Accept) {
                 imprimeInfo(RegraGramatical.r01);
                 break;
-            }
-
-            // Erro! Entrando na recuperação de erro
-            else {
-                if (tokenAtual.getToken() != Token.erro) {
-                    criaRegistraEImprimeErro("Erro sintático: Token do tipo \"" + tokenAtual.getToken() + "\" inesperado: " + tokenAtual.getLexema(),
-                            tokenAtual.getLinha(), tokenAtual.getColuna());
-                }
-
-                if (tokenAtual.getToken() == Token.eof) {
-                    imprimeAviso("Não foi possível terminar a derivação gramatical do programa devido a erros. Análise será limitada\n");
-                    break;
-                }
-
-                // Vamos ignorar tokens até chegar na próxima linha (ou em eof) e então restaurar a pilha
-                TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
-                while (tokenIgnorado.getLinha() == linhaAtual && tokenIgnorado.getToken() != Token.eof) {
-                    tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
-                }
-
-                // O token a ser analisado é o primeiro da nova linha
-                tokenAtual = tokenIgnorado;
-                // Atualizando a linha
-                linhaAtual = tokenAtual.getLinha();
-                // Restaurando a pilhaDeEstados para como estava na linha anterior (antes do erro)
-                copiaPilha(pilhaEstados, pilhaLinhaAnterior);
             }
         }
     }

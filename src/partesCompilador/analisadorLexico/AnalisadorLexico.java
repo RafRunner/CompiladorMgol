@@ -38,14 +38,14 @@ public class AnalisadorLexico extends Analisador {
         tabelaDeSimbolos.put(Token.real.toString(), Token.real.darAtributos());
     }
 
-    public AnalisadorLexico(final List<String> codigoFonte, List<Erro> erros, final int verbosidade) {
+    public AnalisadorLexico(final List<String> codigoFonte, Set<Erro> erros, final int verbosidade) {
         super(erros, verbosidade);
         this.codigoFonte = codigoFonte;
         iniciaTabelaDeSimbolos();
     }
 
     public AnalisadorLexico(final List<String> codigoFonte) {
-        this(codigoFonte, new ArrayList<>(), 2);
+        this(codigoFonte, new HashSet<>(), 2);
     }
     
     public TokenLocalizado lerProximoTokenNaoComentario() {

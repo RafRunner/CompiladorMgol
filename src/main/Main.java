@@ -7,9 +7,7 @@ import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSintatico.AnalisadorSintatico;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 public class Main {
@@ -72,7 +70,7 @@ public class Main {
             return;
         }
 
-        final List<Erro> erros = new ArrayList<>();
+        final Set<Erro> erros = new HashSet<>();
 
         final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, erros, verbosidade);
         final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico, verbosidade);
@@ -99,16 +97,16 @@ public class Main {
         Cor.imprimeComCor("\nFeito por: Rafael Nunes Santana e Armando Soares Neto.", Cor.GREEN);
     }
 
-    private static void imprimeErrosOuSucesso(final List<Erro> erros, final String nomeArquivoSaida) {
+    private static void imprimeErrosOuSucesso(final Set<Erro> erros, final String nomeArquivoSaida) {
         if (erros.size() != 0) {
-            Cor.imprimeComCor("Compilação não concluída por erros. Resumo dos erros:", Cor.BLUE);
+            Cor.imprimeComCor("\nCompilação não concluída por erros. Resumo dos erros:", Cor.BLUE);
             Cor.imprimeComCor("---------------------------------------------------------------------------------------", Cor.BLUE);
             for (final Erro r : erros) {
                 Cor.imprimeComCor(r.toString(), Cor.RED);
             }
         }
         else {
-            Cor.imprimeComCor("Compilação concluída com sucesso. Arquivo de saída: " + nomeArquivoSaida, Cor.BLUE);
+            Cor.imprimeComCor("\nCompilação concluída com sucesso. Arquivo de saída: " + nomeArquivoSaida, Cor.BLUE);
         }
     }
 }

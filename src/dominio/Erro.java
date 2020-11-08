@@ -1,5 +1,7 @@
 package dominio;
 
+import java.util.Objects;
+
 public class Erro {
 
     private final String mensgem;
@@ -22,6 +24,23 @@ public class Erro {
 
     public int getColuna() {
         return coluna;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Erro)) {
+            return false;
+        }
+        final Erro erro = (Erro) o;
+        return linha == erro.linha && coluna == erro.coluna && Objects.equals(mensgem, erro.mensgem);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mensgem, linha, coluna);
     }
 
     @Override

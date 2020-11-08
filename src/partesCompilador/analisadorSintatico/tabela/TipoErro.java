@@ -21,7 +21,7 @@ public enum TipoErro {
     E12(false, Token.fimse.darAtributos(), token -> "Algum \"se\" está sem \"fimse\""),
 
     // Outros casos
-    E9(true,null, token -> "Variável \"" + token.getLexema() + "\" sem atribuição"),
+    E9(false,null, token -> "Variável \"" + token.getLexema() + "\" sem atribuição"),
     E10(true,null, token -> "Argumento inaceitável para leia/escreva: \"" + token.getToken() + "\""),
     // A mensagem e token substituido aqui será montado no analisador sintático
     E13(false, null, null);

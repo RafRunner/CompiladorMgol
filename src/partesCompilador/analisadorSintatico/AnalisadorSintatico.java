@@ -25,7 +25,6 @@ public class AnalisadorSintatico extends Analisador {
         // Iniciando variáveis axiliares para o tratamento de erro
         int linhaAtual = tokenAtual.getLinha();
         final Deque<Integer> pilhaLinhaAnterior = new ArrayDeque<>();
-        boolean lerProximoToken;
         TokenLocalizado tokenAnterior = tokenAtual;
 
         // A pilha começa com o estado 0
@@ -34,26 +33,16 @@ public class AnalisadorSintatico extends Analisador {
 
         while (true) {
             final Integer estado = pilhaEstados.peek();
-            Action action = tabelaSintatica.action(estado, tokenAtual.getToken());
-            lerProximoToken = true;
+            final Action action = tabelaSintatica.action(estado, tokenAtual.getToken());
 
             if (action instanceof ErroSintatico) {
                 final ErroSintatico erro = (ErroSintatico) action;
-                final int linhaErro;
-                final int colunaErro;
-
-                // Faltando ponto e vírgula. Substituíndo a action pela action que seria gerada pelo ; e não lendo o próximo
-                if (erro.getTipoErro() == TipoErro.E1) {
-                    lerProximoToken = false;
-                    linhaErro = tokenAnterior.getLinha();
-                    colunaErro = tokenAnterior.getColuna();
-                    action = tabelaSintatica.action(estado, Token.pt_v);
-                }
 
                 // Entrando na recuperação de erro genérica (modo de pânico por linha)
-                else {
-                    linhaErro = tokenAtual.getLinha();
-                    colunaErro = tokenAtual.getColuna();
+                if (erro.getTipo() == TipoErro.E0) {
+                    if (tokenAtual.getToken() != Token.erro) {
+                        criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAtual), tokenAtual.getLinha(), tokenAtual.getColuna());
+                    }
 
                     // Vamos ignorar tokens até chegar na próxima linha (ou em eof) e então restaurar a pilha
                     TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
@@ -69,8 +58,27 @@ public class AnalisadorSintatico extends Analisador {
                     copiaPilha(pilhaEstados, pilhaLinhaAnterior);
                 }
 
-                if (tokenAtual.getToken() != Token.erro) {
-                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAtual), linhaErro, colunaErro);
+                // No caso de um id solto, simulamos uma atribuição a ele mesmo
+                else if (erro.getTipo() == TipoErro.E9) {
+                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAnterior), tokenAnterior.getLinha(), tokenAnterior.getColuna());
+                    analisadorLexico.pushToBacklog(tokenAtual);
+                    analisadorLexico.pushToBacklog(Token.pt_v.darAtributos(";").localizar(-1, -1));
+                    analisadorLexico.pushToBacklog(tokenAnterior.getTokenEAtributos().localizar(-1, -1));
+                    tokenAtual = Token.rcb.darAtributos("<-").localizar(-1, -1);
+                }
+
+                else if (erro.getTipo() == TipoErro.E10) {
+                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAtual), tokenAnterior.getLinha(), tokenAnterior.getColuna());
+                    analisadorLexico.pushToBacklog(tokenAtual);
+                    // TODO pegar um id existente na tabela de símbolos aqui, por isso não pode ficar no else abaixo
+                    tokenAtual = Token.id.darAtributos("A").localizar(-1, -1);
+                }
+
+                // Tratamento comum para todos os casos onde assumimos que um token está faltando
+                else {
+                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenAnterior), tokenAnterior.getLinha(), tokenAnterior.getColuna());
+                    analisadorLexico.pushToBacklog(tokenAtual);
+                    tokenAtual = erro.getTipo().getTokenFaltando().localizar(tokenAnterior.getLinha(), tokenAnterior.getColuna());
                 }
 
                 if (tokenAtual.getToken() == Token.eof) {
@@ -83,10 +91,8 @@ public class AnalisadorSintatico extends Analisador {
                 final Integer novoEstado = ((Shift) action).getEstado();
                 pilhaEstados.push(novoEstado);
 
-                if (lerProximoToken) {
-                    tokenAnterior = tokenAtual;
-                    tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
-                }
+                tokenAnterior = tokenAtual;
+                tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
 
                 // Salvando o pilha da linha anterior antes de ir para a nova linha que pode conter erros (a linha será ignorada se tiver)
                 if (tokenAtual.getLinha() != linhaAtual) {

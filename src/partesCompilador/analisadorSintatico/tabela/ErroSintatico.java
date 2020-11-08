@@ -14,7 +14,7 @@ public class ErroSintatico extends Action {
         return tipoErro.getDetalhe(token);
     }
 
-    public TipoErro getTipoErro() {
+    public TipoErro getTipo() {
         return tipoErro;
     }
 }

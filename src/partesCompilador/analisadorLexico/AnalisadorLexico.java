@@ -22,6 +22,8 @@ public class AnalisadorLexico extends Analisador {
     private int linha = 0;
     private int coluna = 0;
 
+    private final Deque<TokenLocalizado> backLog = new ArrayDeque<>();
+
     // Populando a tabela de símbolos com as palavras reservadas
     private void iniciaTabelaDeSimbolos() {
         tabelaDeSimbolos.put(Token.inicio.toString(), Token.inicio.darAtributos());
@@ -38,19 +40,19 @@ public class AnalisadorLexico extends Analisador {
         tabelaDeSimbolos.put(Token.real.toString(), Token.real.darAtributos());
     }
 
-    public AnalisadorLexico(final List<String> codigoFonte, Set<Erro> erros, final int verbosidade) {
+    public AnalisadorLexico(final List<String> codigoFonte, List<Erro> erros, final int verbosidade) {
         super(erros, verbosidade);
         this.codigoFonte = codigoFonte;
         iniciaTabelaDeSimbolos();
     }
 
     public AnalisadorLexico(final List<String> codigoFonte) {
-        this(codigoFonte, new HashSet<>(), 2);
+        this(codigoFonte, new ArrayList<>(), 2);
     }
-    
+
     public TokenLocalizado lerProximoTokenNaoComentario() {
         TokenLocalizado tokenLocalizado = lerProximoToken();
-        
+
         while (tokenLocalizado.getToken() == Token.comentario) {
             tokenLocalizado = lerProximoToken();
         }
@@ -59,6 +61,10 @@ public class AnalisadorLexico extends Analisador {
     }
 
     public TokenLocalizado lerProximoToken() {
+        if (!backLog.isEmpty()) {
+            return  backLog.pop();
+        }
+
         // Se acabaram as linhas, acabou o arquivo e retornamos EOF
         if (linha >= codigoFonte.size()) {
             final TokenEAtributos eof = Token.eof.darAtributos("");
@@ -119,6 +125,10 @@ public class AnalisadorLexico extends Analisador {
 
             return tokenEAtributos.localizar(linha, coluna);
         }
+    }
+
+    public void pushToBacklog(final TokenLocalizado token) {
+        backLog.push(token);
     }
 
     public Map<String, TokenEAtributos> getTabelaDeSimbolos() {

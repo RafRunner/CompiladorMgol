@@ -2,18 +2,18 @@ package dominio;
 
 import dominio.enums.Cor;
 
-import java.util.Set;
+import java.util.List;
 
 public abstract class Analisador {
 
-    private final Set<Erro> erros;
+    private final List<Erro> erros;
 
     // Verbosidade 0 -> não imprime nada
     // Verbosidade 1 -> imprime erros e avisos
     // Verbosidade 2 -> imprime tudo (informação do processamento/análise)
     private final int verbosidade;
 
-    public Analisador(Set<Erro> erros, int verbosidade) {
+    public Analisador(List<Erro> erros, int verbosidade) {
         this.erros = erros;
         this.verbosidade = verbosidade;
     }
@@ -30,7 +30,9 @@ public abstract class Analisador {
 
     protected void criaRegistraEImprimeErro(final Object mensagem, final int linha, final int coluna) {
         final Erro erro = new Erro(mensagem.toString(), linha + 1, coluna);
-        erros.add(erro);
+        if (!erros.contains(erro)) {
+            erros.add(erro);
+        }
         imprimeErro(erro);
     }
 
@@ -42,7 +44,7 @@ public abstract class Analisador {
         imprimeSeVerbosidadeSuficiente(mensagem, 2, Cor.WHITE);
     }
 
-    public Set<Erro> getErros() {
+    public List<Erro> getErros() {
         return erros;
     }
 

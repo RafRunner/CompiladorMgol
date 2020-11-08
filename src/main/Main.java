@@ -70,7 +70,7 @@ public class Main {
             return;
         }
 
-        final Set<Erro> erros = new HashSet<>();
+        final List<Erro> erros = new ArrayList<>();
 
         final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, erros, verbosidade);
         final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico, verbosidade);
@@ -97,7 +97,7 @@ public class Main {
         Cor.imprimeComCor("\nFeito por: Rafael Nunes Santana e Armando Soares Neto.", Cor.GREEN);
     }
 
-    private static void imprimeErrosOuSucesso(final Set<Erro> erros, final String nomeArquivoSaida) {
+    private static void imprimeErrosOuSucesso(final List<Erro> erros, final String nomeArquivoSaida) {
         if (erros.size() != 0) {
             Cor.imprimeComCor("\nCompilação não concluída por erros. Resumo dos erros:", Cor.BLUE);
             Cor.imprimeComCor("---------------------------------------------------------------------------------------", Cor.BLUE);

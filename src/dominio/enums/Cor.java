@@ -12,6 +12,8 @@ public enum Cor {
     CYAN("\u001B[36m"),
     WHITE("\u001B[37m");
 
+    private static final boolean ehWindows = System.getProperty("os.name").contains("win");
+
     private final String codigo;
 
     Cor(final String codigo) {
@@ -19,6 +21,10 @@ public enum Cor {
     }
 
     public static void imprimeComCor(final Object mensagem, final Cor cor) {
+        if (ehWindows) {
+            System.out.println(mensagem);
+            return;
+        }
         System.out.println(cor.toString() + mensagem.toString() + RESET.toString());
     }
 

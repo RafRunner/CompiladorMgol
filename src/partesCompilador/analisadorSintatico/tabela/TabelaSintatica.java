@@ -32,7 +32,7 @@ public class TabelaSintatica {
 
         // Erro
         if (stringAction.equals(" ") || stringAction.startsWith("E")) {
-            //Cor.imprimeComCor("Debuggando: S" + estado + " token: " + token, Cor.PURPLE);
+            Cor.imprimeComCor("Debuggando: S" + estado + " token: " + token, Cor.PURPLE);
             if (stringAction.equals(" ")) {
                 return new ErroSintatico(TipoErro.E0);
             }

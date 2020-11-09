@@ -3,6 +3,7 @@ package partesCompilador.analisadorSintatico;
 import dominio.Analisador;
 import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
+import dominio.enums.Cor;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSintatico.tabela.*;
@@ -16,7 +17,7 @@ public class AnalisadorSintatico extends Analisador {
     private final AnalisadorLexico analisadorLexico;
 
     public AnalisadorSintatico(final AnalisadorLexico analisadorLexico, final int verbosidade) {
-        super(analisadorLexico.getErros(), verbosidade);
+        super(analisadorLexico.getErros(), verbosidade, Cor.CYAN);
         this.analisadorLexico = analisadorLexico;
     }
 
@@ -35,74 +36,6 @@ public class AnalisadorSintatico extends Analisador {
         while (true) {
             final Integer estado = pilhaEstados.peek();
             final Action action = tabelaSintatica.action(estado, tokenAtual.getToken());
-
-            if (action instanceof ErroSintatico) {
-                final ErroSintatico erro = (ErroSintatico) action;
-
-                final TokenLocalizado tokenUsado = erro.usaAtual() ? tokenAtual : tokenAnterior;
-
-                // Entrando na recuperação de erro genérica (modo de pânico por linha)
-                if (erro.getTipo() == TipoErro.E0 || erro.getTipo() == TipoErro.E11) {
-                    // Vamos ignorar tokens até chegar na próxima linha (ou em eof) e então restaurar a pilha
-                    TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
-                    while (tokenIgnorado.getLinha() == linhaAtual && tokenIgnorado.getToken() != Token.eof) {
-                        tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
-                    }
-
-                    // O token a ser analisado é o primeiro da nova linha
-                    tokenAtual = tokenIgnorado;
-                    // Atualizando a linha
-                    linhaAtual = tokenAtual.getLinha();
-                    // Restaurando a pilhaDeEstados para como estava na linha anterior (antes do erro)
-                    copiaPilha(pilhaEstados, pilhaLinhaAnterior);
-                }
-
-                // No caso de um id solto, simulamos uma atribuição a ele mesmo
-                else if (erro.getTipo() == TipoErro.E9) {
-                    analisadorLexico.pushToBacklog(tokenAtual);
-                    analisadorLexico.pushToBacklog(Token.pt_v.darAtributos(";").localizar(-2, -1));
-                    analisadorLexico.pushToBacklog(tokenAnterior.getTokenEAtributos().localizar(-2, -1));
-                    tokenAtual = Token.rcb.darAtributos("<-").localizar(-2, -1);
-                }
-
-                // Argumento inválido para leia/escreva. Simulamos um id qualquer (pegado da tabela de símbolos)
-                else if (erro.getTipo() == TipoErro.E10) {
-                    final Optional<TokenEAtributos> idQualquer = analisadorLexico.getTabelaDeSimbolos().values().stream().filter(token -> token.getToken() == Token.id).findFirst();
-                    tokenAtual = idQualquer.orElse(Token.id.darAtributos("EU_NAO_EXISTO")).localizar(-2, -1);
-                }
-
-                // Caso onde falta um opm ou opr. Nesse caso sempre sabemos que vamos fazer a redução pela regra 20 ou 21, então forçamos essa redução
-                // e depois verificamos a action com opm. Se for erro sabemos que deveria ser um opr, caso contrário deixamos opr.
-                else if (erro.getTipo() == TipoErro.E13) {
-                    final Integer temp = pilhaEstados.pop();
-                    analisadorLexico.pushToBacklog(tokenAtual);
-
-                    final TokenEAtributos token = tabelaSintatica.action(tabelaSintatica.Goto(pilhaEstados.peek(), NaoTerminal.OPRD), Token.opm) instanceof ErroSintatico ?
-                            Token.opr.darAtributos(">") : Token.opm.darAtributos("+");
-
-                    tokenAtual = token.localizar(-2, -1);
-                    pilhaEstados.push(temp);
-
-                    final String mensagem = token.getToken() == Token.opm ? "Fatando operador matemático após \"" + tokenUsado.getLexema() + "\"" : "Fatando operador lógico após \"" + tokenUsado.getLexema() + "\"";
-                    criaRegistraEImprimeErro(mensagem, tokenUsado.getLinha(), tokenUsado.getColuna());
-                    continue;
-                }
-
-                // Tratamento comum para todos os casos onde assumimos que um token está faltando
-                else {
-                    analisadorLexico.pushToBacklog(tokenAtual);
-                    tokenAtual = erro.getTipo().getTokenFaltando().localizar(tokenAnterior.getLinha(), tokenAnterior.getColuna());
-                }
-
-                if (tokenUsado.getToken() != Token.erro) {
-                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenUsado), tokenUsado.getLinha(), tokenUsado.getColuna());
-                }
-
-                if (tokenAtual.getToken() == Token.eof) {
-                    imprimeAviso("Não foi possível terminar a derivação gramatical do programa devido a erros. Análise será limitada");
-                    break;
-                }
-            }
 
             if (action instanceof Shift) {
                 final Integer novoEstado = ((Shift) action).getEstado();
@@ -134,6 +67,76 @@ public class AnalisadorSintatico extends Analisador {
             else if (action instanceof Accept) {
                 imprimeInfo(RegraGramatical.r01);
                 break;
+            }
+
+            // Se não é nenhuma das possibildiades acima, sobrou apenas o erro
+            else {
+                final ErroSintatico erro = (ErroSintatico) action;
+
+                final TokenLocalizado tokenUsado = erro.usaAtual() ? tokenAtual : tokenAnterior;
+
+                // Entrando na recuperação de erro genérica (modo de pânico por linha)
+                if (erro.getTipo() == TipoErro.E0 || erro.getTipo() == TipoErro.E11) {
+                    // Vamos ignorar tokens até chegar na próxima linha (ou em eof) e então restaurar a pilha
+                    TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
+                    while (tokenIgnorado.getLinha() == linhaAtual && tokenIgnorado.getToken() != Token.eof) {
+                        tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
+                    }
+
+                    // O token a ser analisado é o primeiro da nova linha
+                    tokenAtual = tokenIgnorado;
+                    // Atualizando a linha
+                    linhaAtual = tokenAtual.getLinha();
+                    // Restaurando a pilhaDeEstados para como estava na linha anterior (antes do erro)
+                    copiaPilha(pilhaEstados, pilhaLinhaAnterior);
+
+                    if (tokenAtual.getToken() == Token.eof) {
+                        imprimeAviso("Não foi possível terminar a derivação gramatical do programa devido a erros. Análise será limitada");
+                        break;
+                    }
+                }
+
+                // No caso de um id solto, simulamos uma atribuição a ele mesmo
+                else if (erro.getTipo() == TipoErro.E9) {
+                    analisadorLexico.pushToBacklog(tokenAtual);
+                    analisadorLexico.pushToBacklog(tokenAnterior);
+                    tokenAtual = Token.rcb.darAtributos("<-").localizar(tokenUsado.getLinha(), tokenUsado.getColuna());
+                }
+
+                // Argumento inválido para leia/escreva. Simulamos um id qualquer (pegado da tabela de símbolos)
+                else if (erro.getTipo() == TipoErro.E10) {
+                    final Optional<TokenEAtributos> idQualquer = analisadorLexico.getTabelaDeSimbolos().values().stream().filter(token -> token.getToken() == Token.id).findFirst();
+                    tokenAtual = idQualquer.orElse(Token.id.darAtributos("EU_NAO_EXISTO")).localizar(tokenUsado.getLinha(), tokenUsado.getColuna());
+                }
+
+                // Caso onde falta um opm ou opr. Nesse caso sempre sabemos que vamos fazer a redução pela regra 20 ou 21, então forçamos essa redução
+                // e depois verificamos a action com opm. Se for erro sabemos que deveria ser um opr, caso contrário deixamos opr.
+                else if (erro.getTipo() == TipoErro.E13) {
+                    final Integer temp = pilhaEstados.pop();
+                    analisadorLexico.pushToBacklog(tokenAtual);
+
+                    final Integer estadoAposReducao = tabelaSintatica.Goto(pilhaEstados.peek(), NaoTerminal.OPRD);
+                    final TokenEAtributos token = tabelaSintatica.action(estadoAposReducao, Token.opm) instanceof ErroSintatico ?
+                            Token.opr.darAtributos(">") : Token.opm.darAtributos("+");
+
+                    tokenAtual = token.localizar(tokenUsado.getLinha(), tokenUsado.getColuna());
+                    pilhaEstados.push(temp);
+
+                    final String mensagem = token.getToken() == Token.opm ? "Fatando operador matemático após \"" + tokenUsado.getLexema() + "\"" : "Fatando operador lógico após \"" + tokenUsado.getLexema() + "\"";
+                    criaRegistraEImprimeErro(mensagem, tokenUsado.getLinha(), tokenUsado.getColuna());
+                    continue;
+                }
+
+                // Tratamento comum para todos os casos onde assumimos que um token está faltando
+                else {
+                    analisadorLexico.pushToBacklog(tokenAtual);
+                    tokenAtual = erro.getTipo().getTokenFaltando().localizar(tokenUsado.getLinha(), tokenUsado.getColuna());
+                }
+
+                // Caso seja um token de erro, é um erro léxico e não deve ser registrado novamente
+                if (tokenUsado.getToken() != Token.erro) {
+                    criaRegistraEImprimeErro("Erro sintático: " + erro.montaDetalhe(tokenUsado), tokenUsado.getLinha(), tokenUsado.getColuna());
+                }
             }
         }
     }

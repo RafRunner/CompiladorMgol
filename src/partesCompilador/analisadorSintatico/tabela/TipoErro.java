@@ -6,6 +6,7 @@ import dominio.enums.Token;
 
 public enum TipoErro {
 
+    // Essas são o tratamento de erro genérico (modo pânico)
     // Espaços vazios são E0
     E0(true,null, token -> "Token do tipo \"" + token.getToken() + "\" inesperado: " + token.getLexema()),
     E11(false,null, token -> "Declaração da variável \"" + token.getLexema() + "\" deve ser feita na seção de variáveis"),
@@ -20,6 +21,7 @@ public enum TipoErro {
     E7(false, Token.entao.darAtributos(), token -> "Faltando um \"entao\" para completar a expressão se"),
     E8(false, Token.fim.darAtributos(), token -> "Faltando um \"fim\" no final do programa"),
     E12(false, Token.fimse.darAtributos(), token -> "Algum \"se\" está sem \"fimse\""),
+    E14(true, Token.eof.darAtributos(""), token -> "Token inesperado \"" + token.getLexema() + "\" após \"fim\". A partir daqui tudo será ignorado."),
 
     // Outros casos
     E9(false,null, token -> "Variável \"" + token.getLexema() + "\" sem atribuição"),

@@ -12,10 +12,12 @@ public abstract class Analisador {
     // Verbosidade 1 -> imprime erros e avisos
     // Verbosidade 2 -> imprime tudo (informação do processamento/análise)
     private final int verbosidade;
+    private final Cor corInfo;
 
-    public Analisador(List<Erro> erros, int verbosidade) {
+    public Analisador(final List<Erro> erros, final int verbosidade, final Cor corInfo) {
         this.erros = erros;
         this.verbosidade = verbosidade;
+        this.corInfo = corInfo;
     }
 
     private void imprimeSeVerbosidadeSuficiente(final Object mensagem, final int vebosidadeMinima, final Cor cor) {
@@ -41,7 +43,7 @@ public abstract class Analisador {
     }
 
     protected void imprimeInfo(final Object mensagem) {
-        imprimeSeVerbosidadeSuficiente(mensagem, 2, Cor.WHITE);
+        imprimeSeVerbosidadeSuficiente(mensagem, 2, corInfo);
     }
 
     public List<Erro> getErros() {

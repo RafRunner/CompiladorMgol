@@ -4,6 +4,7 @@ import dominio.Analisador;
 import dominio.Erro;
 import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
+import dominio.enums.Cor;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
 import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
@@ -15,7 +16,7 @@ public class AnalisadorLexico extends Analisador {
     // O código fonte representado como uma Lista de String (linhas e colunas)
     private final List<String> codigoFonte;
     // A tabela de símbolos representada como um Mapa (HashMap) que leva de lexema (String) à TokenEAtributos
-    private final Map<String, TokenEAtributos> tabelaDeSimbolos = new HashMap<>();
+    private final Map<String, TokenEAtributos> tabelaDeSimbolos = new LinkedHashMap<>();
 
     private final DFALexico DFA = new DFALexico();
 
@@ -41,7 +42,7 @@ public class AnalisadorLexico extends Analisador {
     }
 
     public AnalisadorLexico(final List<String> codigoFonte, List<Erro> erros, final int verbosidade) {
-        super(erros, verbosidade);
+        super(erros, verbosidade, Cor.PURPLE);
         this.codigoFonte = codigoFonte;
         iniciaTabelaDeSimbolos();
     }

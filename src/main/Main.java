@@ -122,7 +122,7 @@ public class Main {
         Cor.imprimeComCor("Por padrão o compilador irá gerar o código objeto na mesma pasta onde está sendo executado com o mesmo nome do arquivo fonte.", Cor.BLUE);
 
         Cor.imprimeComCor("\nEle suporta alguns modificadores. Eles são:", Cor.WHITE);
-        Cor.imprimeComCor("\t-h (ajuda): imprime essa mensagem", Cor.PURPLE);
+        Cor.imprimeComCor("\t-h (ajuda): imprime essa mensagem.", Cor.PURPLE);
 
         Cor.imprimeComCor("\n\t-v (verbosidade): argumento numérico para facilitar depuração de erros. Por padrão é zero. Opções:", Cor.PURPLE);
         Cor.imprimeComCor("\t\t-v 0 -> Não imprime nada durante a análise/compilação. Erros (se existirem) são listados ao final.", Cor.CYAN);

@@ -42,7 +42,7 @@ public class AnalisadorSintatico extends Analisador {
                 final TokenLocalizado tokenUsado = erro.usaAtual() ? tokenAtual : tokenAnterior;
 
                 // Entrando na recuperação de erro genérica (modo de pânico por linha)
-                if (erro.getTipo() == TipoErro.E0) {
+                if (erro.getTipo() == TipoErro.E0 || erro.getTipo() == TipoErro.E11) {
                     // Vamos ignorar tokens até chegar na próxima linha (ou em eof) e então restaurar a pilha
                     TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
                     while (tokenIgnorado.getLinha() == linhaAtual && tokenIgnorado.getToken() != Token.eof) {

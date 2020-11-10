@@ -76,7 +76,7 @@ public class AnalisadorSintatico extends Analisador {
                 final TokenLocalizado tokenUsado = erro.usaAtual() ? tokenAtual : tokenAnterior;
 
                 // Entrando na recuperação de erro genérica (modo de pânico por linha)
-                if (erro.getTipo() == TipoErro.E0 || erro.getTipo() == TipoErro.E11) {
+                if (erro.getTipo().ordinal() <= TipoErro.E16.ordinal()) {
                     // Vamos ignorar tokens até chegar na próxima linha (ou em eof) e então restaurar a pilha
                     TokenLocalizado tokenIgnorado = analisadorLexico.lerProximoTokenNaoComentario();
                     while (tokenIgnorado.getLinha() == linhaAtual && tokenIgnorado.getToken() != Token.eof) {
@@ -100,13 +100,13 @@ public class AnalisadorSintatico extends Analisador {
                 else if (erro.getTipo() == TipoErro.E9) {
                     analisadorLexico.pushToBacklog(tokenAtual);
                     analisadorLexico.pushToBacklog(tokenAnterior);
-                    tokenAtual = Token.rcb.darAtributos("<-").localizar(tokenUsado.getLinha(), tokenUsado.getColuna());
+                    tokenAtual = Token.rcb.darAtributos("<-").localizar();
                 }
 
                 // Argumento inválido para leia/escreva. Simulamos um id qualquer (pegado da tabela de símbolos)
                 else if (erro.getTipo() == TipoErro.E10) {
                     final Optional<TokenEAtributos> idQualquer = analisadorLexico.getTabelaDeSimbolos().values().stream().filter(token -> token.getToken() == Token.id).findFirst();
-                    tokenAtual = idQualquer.orElse(Token.id.darAtributos("EU_NAO_EXISTO")).localizar(tokenUsado.getLinha(), tokenUsado.getColuna());
+                    tokenAtual = idQualquer.orElse(Token.id.darAtributos("EU_NAO_EXISTO")).localizar();
                 }
 
                 // Caso onde falta um opm ou opr. Nesse caso sempre sabemos que vamos fazer a redução pela regra 20 ou 21, então forçamos essa redução
@@ -119,10 +119,13 @@ public class AnalisadorSintatico extends Analisador {
                     final TokenEAtributos token = tabelaSintatica.action(estadoAposReducao, Token.opm) instanceof ErroSintatico ?
                             Token.opr.darAtributos(">") : Token.opm.darAtributos("+");
 
-                    tokenAtual = token.localizar(tokenUsado.getLinha(), tokenUsado.getColuna());
+                    tokenAtual = token.localizar();
                     pilhaEstados.push(temp);
 
-                    final String mensagem = token.getToken() == Token.opm ? "Fatando operador matemático após \"" + tokenUsado.getLexema() + "\"" : "Fatando operador lógico após \"" + tokenUsado.getLexema() + "\"";
+                    final String mensagem = token.getToken() == Token.opm ?
+                            "Fatando operador matemático após \"" + tokenUsado.getLexema() + "\"" :
+                            "Fatando operador lógico após \"" + tokenUsado.getLexema() + "\"";
+
                     criaRegistraEImprimeErro(mensagem, tokenUsado.getLinha(), tokenUsado.getColuna());
                     continue;
                 }
@@ -130,7 +133,7 @@ public class AnalisadorSintatico extends Analisador {
                 // Tratamento comum para todos os casos onde assumimos que um token está faltando
                 else {
                     analisadorLexico.pushToBacklog(tokenAtual);
-                    tokenAtual = erro.getTipo().getTokenFaltando().localizar(tokenUsado.getLinha(), tokenUsado.getColuna());
+                    tokenAtual = erro.getTipo().getTokenFaltando().localizar();
                 }
 
                 // Caso seja um token de erro, é um erro léxico e não deve ser registrado novamente

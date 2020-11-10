@@ -32,9 +32,12 @@ public abstract class Analisador {
 
     protected void criaRegistraEImprimeErro(final Object mensagem, final int linha, final int coluna) {
         final Erro erro = new Erro(mensagem.toString(), linha + 1, coluna);
-        if (!erros.contains(erro)) {
+
+        // Não registramos erros duplicados ou erros em posições negativas pois foram gerados pelo próprio tratamento de erro
+        if (!erros.contains(erro) && erro.getLinha() >= 0 && erro.getColuna() >= 0) {
             erros.add(erro);
         }
+
         imprimeErro(erro);
     }
 

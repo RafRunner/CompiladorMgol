@@ -10,6 +10,8 @@ public enum TipoErro {
     // Espaços vazios são E0
     E0(true,null, token -> "Token do tipo \"" + token.getToken() + "\" inesperado: " + token.getLexema()),
     E11(false,null, token -> "Declaração da variável \"" + token.getLexema() + "\" deve ser feita na seção de variáveis"),
+    E15(true,null, token -> "Espaço de variáveis usado para comando: \"" + token.getLexema() + "\""),
+    E16(false,null, token -> "Atribuição da variável \"" + token.getLexema() + "\" deve ser feito fora do espaço de variáveis"),
 
     // Casos onde assumimos estar faltando um token
     E1(false, Token.pt_v.darAtributos(";"), token -> "Faltando ponto e vírgula após \"" + token.getLexema() + "\""),

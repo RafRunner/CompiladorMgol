@@ -37,6 +37,11 @@ public class TokenEAtributos {
         return new TokenLocalizado(this, linha, coluna);
     }
 
+    // Versão usada para quando criamos tokens não existentes para coreção de erros. Posições são nagativas porque o token não existe de verdade
+    public TokenLocalizado localizar() {
+        return new TokenLocalizado(this, -2, -1);
+    }
+
     @Override
     public String toString() {
         return "TokenEAtributos [ token: " + token + ", lexema: '" + lexema + "', tipo: " + tipo + " ]";

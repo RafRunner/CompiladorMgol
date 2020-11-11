@@ -6,7 +6,7 @@ public class Reduce extends Action {
 
     private final RegraGramatical regraGramatical;
 
-    public Reduce(RegraGramatical regraGramatical) {
+    public Reduce(final RegraGramatical regraGramatical) {
         this.regraGramatical = regraGramatical;
     }
 

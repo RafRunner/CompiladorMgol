@@ -6,7 +6,7 @@ public class ErroSintatico extends Action {
 
     private final TipoErro tipoErro;
 
-    public ErroSintatico(TipoErro tipoErro) {
+    public ErroSintatico(final TipoErro tipoErro) {
         this.tipoErro = tipoErro;
     }
 

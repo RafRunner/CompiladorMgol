@@ -4,7 +4,7 @@ public class Shift extends Action {
 
     private final Integer estado;
 
-    public Shift(Integer estado) {
+    public Shift(final Integer estado) {
         this.estado = estado;
     }
 

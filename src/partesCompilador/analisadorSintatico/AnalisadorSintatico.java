@@ -122,11 +122,9 @@ public class AnalisadorSintatico extends Analisador {
                     tokenAtual = token.localizar();
                     pilhaEstados.push(temp);
 
-                    final String mensagem = token.getToken() == Token.opm ?
-                            "Fatando operador matemático após \"" + tokenUsado.getLexema() + "\"" :
-                            "Fatando operador lógico após \"" + tokenUsado.getLexema() + "\"";
+                    final String tipo = token.getToken() == Token.opm ? "matemático" : "lógico";
 
-                    criaRegistraEImprimeErro(mensagem, tokenUsado.getLinha(), tokenUsado.getColuna());
+                    criaRegistraEImprimeErro(String.format(erro.montaDetalhe(tokenUsado), tipo), tokenUsado.getLinha(), tokenUsado.getColuna());
                     continue;
                 }
 

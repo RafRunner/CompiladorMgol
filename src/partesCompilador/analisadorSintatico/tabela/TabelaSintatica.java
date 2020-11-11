@@ -11,19 +11,19 @@ import java.util.List;
 
 public class TabelaSintatica {
 
-    private static final String caminhoTabelaAction = "res/analisadorSintatico/action.csv";
-    private static final String caminhoTabelaGoto = "res/analisadorSintatico/goto.csv";
+    private static final String caminhoTabelaAction = "/analisadorSintatico/action.csv";
+    private static final String caminhoTabelaGoto = "/analisadorSintatico/goto.csv";
     private final List<List<String>> tabelaAction;
     private final List<List<String>> tabelaGoto;
 
     public TabelaSintatica() {
         try {
-            this.tabelaAction = LeitorArquivos.lerCsv(caminhoTabelaAction);
-            this.tabelaGoto = LeitorArquivos.lerCsv(caminhoTabelaGoto);
+            this.tabelaAction = LeitorArquivos.lerCsvResource(caminhoTabelaAction);
+            this.tabelaGoto = LeitorArquivos.lerCsvResource(caminhoTabelaGoto);
 
-        } catch (FileNotFoundException ignored) {
+        } catch (final FileNotFoundException e) {
             // Nunca deve acontecer
-            throw new RuntimeException("Caminho de algum dos arquivos da tabela sintática errado. Devem estar no mesmo diretório do executável em res/analisadorSintatico");
+            throw new RuntimeException("Um dos arquivos das tabelas não foi encontrado: " + e);
         }
     }
 

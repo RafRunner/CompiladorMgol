@@ -28,8 +28,7 @@ public enum TipoErro {
     // Outros casos
     E9(false,null, token -> "Variável \"" + token.getLexema() + "\" sem atribuição"),
     E10(true,null, token -> "Argumento inaceitável para leia/escreva: \"" + token.getToken() + "\""),
-    // A mensagem e token substituido aqui será montado no analisador sintático
-    E13(false, null, null);
+    E13(false, null, token -> "Fatando operador %s após \"" + token.getLexema() + "\"");
 
     private interface Detalhe {
         String montaDetalhe(final TokenLocalizado token);

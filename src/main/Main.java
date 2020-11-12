@@ -17,11 +17,7 @@ public class Main {
     private final static String regexFormatos = "\\.(" + String.join("|", formatosSuportados) + ")$";
 
     public static void main(String[] args) {
-        if (args.length == 0) {
-            Cor.imprimeComCor("Uso incorreto do compilador. Para ajuda use -h", Cor.RED);
-            return;
-        }
-        if (Arrays.asList(args).contains("-h")) {
+        if (args.length == 0 || Arrays.asList(args).contains("-h")) {
             imprimeAjuda();
             return;
         }
@@ -117,15 +113,18 @@ public class Main {
                 "         \\/____/                                                                    \\/____/\n" +
                 "\n", Cor.YELLOW);
 
+        Cor.imprimeComCor("\nUso: CompiladorMgol [modificadores] <arquivo fonte>", Cor.WHITE);
+
         Cor.imprimeComCor("\nEsse é o compilador MGOL, capaz de compilar da linguagem fictícia MGOL para C.", Cor.BLUE);
         Cor.imprimeComCor("O último argumento do compilador deve sempre ser o caminho até o arquivo que contém o código fonte que se deseja compilar.", Cor.BLUE);
         Cor.imprimeComCor("Por padrão o compilador irá gerar o código objeto na mesma pasta onde está sendo executado com o mesmo nome do arquivo fonte.", Cor.BLUE);
+        Cor.imprimeComCor("Caso erros forem dectados durante a compilação, o arquivo objeto não será gerado e no lugar os erros serão listados", Cor.BLUE);
 
         Cor.imprimeComCor("\nEle suporta alguns modificadores. Eles são:", Cor.WHITE);
         Cor.imprimeComCor("\t-h (ajuda): imprime essa mensagem.", Cor.PURPLE);
 
         Cor.imprimeComCor("\n\t-v (verbosidade): argumento numérico para facilitar depuração de erros. Por padrão é zero. Opções:", Cor.PURPLE);
-        Cor.imprimeComCor("\t\t-v 0 -> Não imprime nada durante a análise/compilação. Erros (se existirem) são listados ao final.", Cor.CYAN);
+        Cor.imprimeComCor("\t\t-v 0 -> Não imprime nada durante a análise/compilação.", Cor.CYAN);
         Cor.imprimeComCor("\t\t-v 1 -> Erros e avisos são impressos durante a análise/compilação.", Cor.CYAN);
         Cor.imprimeComCor("\t\t-v 2 -> Tudo durante o processo de análise/compilação é impresso. Pode ficar confuso.", Cor.CYAN);
 

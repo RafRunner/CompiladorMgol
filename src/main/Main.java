@@ -74,9 +74,12 @@ public class Main {
 
         final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, erros, verbosidade);
         final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico, verbosidade);
-        analisadorSintatico.analisa();
 
-        imprimeErrosOuSucesso(erros, nomeArquivoSaida);
+        long inicio = System.currentTimeMillis();
+        analisadorSintatico.analisa();
+        long fim = System.currentTimeMillis();
+
+        imprimeErrosOuSucesso(erros, nomeArquivoSaida, fim - inicio);
     }
 
     private static void imprimeAjuda() {
@@ -133,7 +136,7 @@ public class Main {
         Cor.imprimeComCor("\nFeito por: Rafael Nunes Santana e Armando Soares e Silva Neto.\n", Cor.GREEN);
     }
 
-    private static void imprimeErrosOuSucesso(final List<Erro> erros, final String nomeArquivoSaida) {
+    private static void imprimeErrosOuSucesso(final List<Erro> erros, final String nomeArquivoSaida, final long tempo) {
         if (erros.size() != 0) {
             Cor.imprimeComCor("\nCompilação não concluída por erros. Resumo dos erros:", Cor.BLUE);
             Cor.imprimeComCor("---------------------------------------------------------------------------------------------------------", Cor.BLUE);
@@ -143,7 +146,7 @@ public class Main {
             System.out.println();
         }
         else {
-            Cor.imprimeComCor("\nCompilação concluída com sucesso. Arquivo de saída: " + nomeArquivoSaida + "\n", Cor.BLUE);
+            Cor.imprimeComCor("\nCompilação concluída com sucesso em " + tempo + "ms. Arquivo de saída: " + nomeArquivoSaida + "\n", Cor.BLUE);
         }
     }
 }

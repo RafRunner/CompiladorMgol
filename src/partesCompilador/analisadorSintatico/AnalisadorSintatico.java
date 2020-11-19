@@ -65,7 +65,7 @@ public class AnalisadorSintatico extends Analisador {
             }
 
             else if (action instanceof Accept) {
-                imprimeInfo(RegraGramatical.r01);
+                imprimeInfo(RegraGramatical.R1);
                 break;
             }
 

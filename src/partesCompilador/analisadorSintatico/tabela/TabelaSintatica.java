@@ -35,7 +35,7 @@ public class TabelaSintatica {
         }
 
         if (stringAction.startsWith("R")) {
-            return new Reduce(RegraGramatical.values()[Integer.parseInt(stringAction.substring(1)) - 1]);
+            return new Reduce(RegraGramatical.valueOf(stringAction));
         }
 
         if (stringAction.equals("ACC")) {

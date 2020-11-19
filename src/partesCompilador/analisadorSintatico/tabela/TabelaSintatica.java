@@ -43,11 +43,11 @@ public class TabelaSintatica {
         }
 
         //Cor.imprimeComCor("Debuggando: S" + estado + " token: " + token, Cor.GREEN);
-        if (stringAction.equals(" ")) {
-            return new ErroSintatico(TipoErro.E0);
+        if (stringAction.startsWith("E")) {
+            return new ErroSintatico(TipoErro.valueOf(stringAction));
         }
 
-        return new ErroSintatico(TipoErro.valueOf(stringAction));
+        return new ErroSintatico(TipoErro.E0);
     }
 
     public Integer Goto(final Integer estado, final NaoTerminal naoTerminal) {

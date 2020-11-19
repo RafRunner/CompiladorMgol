@@ -10,7 +10,6 @@ public enum TipoErro {
     // Espaços vazios são E0
     E0(true,null, token -> "Token do tipo \"" + token.getToken() + "\" inesperado: " + token.getLexema()),
     E11(false,null, token -> "Declaração da variável \"" + token.getLexema() + "\" deve ser feita na seção de variáveis"),
-    E15(true,null, token -> "Espaço de variáveis usado para comando: \"" + token.getLexema() + "\""),
     E16(false,null, token -> "Atribuição da variável \"" + token.getLexema() + "\" deve ser feito fora do espaço de variáveis"),
 
     // Casos onde assumimos estar faltando um token
@@ -24,6 +23,7 @@ public enum TipoErro {
     E8(false, Token.fim.darAtributos(), token -> "Faltando um \"fim\" no final do programa"),
     E12(false, Token.fimse.darAtributos(), token -> "Algum \"se\" está sem \"fimse\""),
     E14(true, Token.eof.darAtributos(""), token -> "Token inesperado \"" + token.getLexema() + "\" após \"fim\". A partir daqui tudo será ignorado."),
+    E15(false,Token.inteiro.darAtributos(), token -> "Variável: \"" + token.getLexema() + "\" sem tipo declarado. Deve ser inteiro, real ou lit"),
 
     // Outros casos
     E9(false,null, token -> "Variável \"" + token.getLexema() + "\" sem atribuição"),

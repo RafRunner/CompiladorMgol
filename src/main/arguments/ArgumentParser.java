@@ -12,9 +12,13 @@ public class ArgumentParser {
         for (int i = 0; i < args.length; i++) {
             final String arg = args[i];
 
+            if (arg.charAt(0) != '-') {
+                throw new InvalidArgumentException("Argumentos inválidos!");
+            }
+
             if (arg.length() == 2) {
                 final Argument argument = expectedArguments.stream()
-                        .filter(argument1 -> ("-" + argument1.flag).equals(arg)).findFirst().orElse(null);
+                        .filter(a -> ("-" + a.flag).equals(arg)).findFirst().orElse(null);
 
                 if (argument == null) {
                     throw new InvalidArgumentException("Argumentos inválidos!");
@@ -32,7 +36,7 @@ public class ArgumentParser {
                 final char[] flags = arg.substring(1).toCharArray();
                 for (final char flag : flags) {
                     final Argument argument = expectedArguments.stream()
-                            .filter(argument1 -> argument1.flag == flag && argument1.type == ArgumentType.FLAG).findFirst().orElse(null);
+                            .filter(a -> a.flag == flag && a.type == ArgumentType.FLAG).findFirst().orElse(null);
 
                     if (argument == null) {
                         throw new InvalidArgumentException("Argumentos inválidos!");

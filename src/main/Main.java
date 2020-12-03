@@ -3,6 +3,10 @@ package main;
 import dominio.Erro;
 import dominio.LeitorArquivos;
 import dominio.enums.Cor;
+import main.arguments.ArgumentParser;
+import main.arguments.FlagArgument;
+import main.arguments.IntegerArgument;
+import main.arguments.StringArgument;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSintatico.AnalisadorSintatico;
 
@@ -17,7 +21,7 @@ public class Main {
     private final static String regexFormatos = "\\.(" + String.join("|", formatosSuportados) + ")$";
 
     public static void main(String[] args) {
-        if (args.length == 0 || Arrays.asList(args).contains("-h")) {
+        if (args.length == 0 || args[0].equals("-h")) {
             imprimeAjuda();
             return;
         }
@@ -30,35 +34,34 @@ public class Main {
             return;
         }
 
-        int verbosidade = 0;
-        String nomeArquivoSaida = nomeArquivo.replaceAll("\\G.+[\\\\\\/]", "").replaceAll(regexFormatos, ".c");
+        final String nomeSaidaDefault = nomeArquivo.replaceAll("\\G.+[\\\\\\/]", "").replaceAll(regexFormatos, "");
 
-        for (int i = 0; i < args.length - 1; i++) {
-            final String arg = args[i];
+        final ArgumentParser argumentParser;
+        try {
+            argumentParser = new ArgumentParser(
+                    List.of(new IntegerArgument("verbosidade", 'v', "0"),
+                            new StringArgument("nome arquivo saída", 'o', nomeSaidaDefault),
+                            new FlagArgument("help", 'h', "false"))
+                    , Arrays.copyOfRange(args, 0, args.length - 1));
+        } catch (RuntimeException ignored) {
+            Cor.imprimeComCor("Argumentos inválidos! Veja ajuda abaixo:\n", Cor.RED);
+            imprimeAjuda();
+            return;
+        }
 
-            if (arg.equals("-h")) {
+        final int verbosidade;
+        final String nomeArquivoSaida;
+        try {
+            if (argumentParser.getBollArgument('h')) {
                 imprimeAjuda();
                 return;
             }
-            if (arg.equals("-v")) {
-                i++;
-                try {
-                    verbosidade = Integer.parseInt(args[i]);
-                } catch (NumberFormatException ignorede) {
-                    Cor.imprimeComCor("Opção inválida para o argumento -v (verbosidade). Deve ser um número", Cor.RED);
-                    return;
-                }
-                continue;
-            }
-            if (arg.equals("-o")) {
-                i++;
-                nomeArquivoSaida = args[i] + ".c";
-            }
-            else {
-                Cor.imprimeComCor("Uso incorreto do compilador! Veja a ajuda abaixo:", Cor.RED);
-                imprimeAjuda();
-                return;
-            }
+
+            verbosidade = argumentParser.getIntArgument('v');
+            nomeArquivoSaida = argumentParser.getStringArgument('o') + ".c";
+        } catch (RuntimeException e) {
+            Cor.imprimeComCor(e.getMessage(), Cor.RED);
+            return;
         }
 
         final List<String> codigoFonte;
@@ -75,9 +78,9 @@ public class Main {
         final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, erros, verbosidade);
         final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico, verbosidade);
 
-        long inicio = System.currentTimeMillis();
+        final long inicio = System.currentTimeMillis();
         analisadorSintatico.analisa();
-        long fim = System.currentTimeMillis();
+        final long fim = System.currentTimeMillis();
 
         imprimeErrosOuSucesso(erros, nomeArquivoSaida, fim - inicio);
     }

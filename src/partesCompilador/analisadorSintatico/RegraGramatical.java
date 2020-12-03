@@ -37,8 +37,7 @@ public enum RegraGramatical {
     R27(NaoTerminal.CORPO,     List.of(NaoTerminal.CMD, NaoTerminal.CORPO)),
     R28(NaoTerminal.CORPO,     List.of(NaoTerminal.COND, NaoTerminal.CORPO)),
     R29(NaoTerminal.CORPO,     List.of(Token.fimse)),
-    R30(NaoTerminal.A,         List.of(Token.fim)),
-    R31(NaoTerminal.LD,        List.of(Token.literal));
+    R30(NaoTerminal.A,         List.of(Token.fim));
 
     private final NaoTerminal ladoEsquedo;
     private final List<Object> ladoDireito;

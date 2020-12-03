@@ -1,7 +1,6 @@
 package partesCompilador.analisadorSintatico.tabela;
 
 import dominio.LeitorArquivos;
-import dominio.enums.Cor;
 import dominio.enums.Token;
 import partesCompilador.analisadorSintatico.NaoTerminal;
 import partesCompilador.analisadorSintatico.RegraGramatical;
@@ -11,8 +10,8 @@ import java.util.List;
 
 public class TabelaSintatica {
 
-    private static final String caminhoTabelaAction = "/analisadorSintatico/action.csv";
-    private static final String caminhoTabelaGoto = "/analisadorSintatico/goto.csv";
+    private static final String caminhoTabelaAction = "/action.csv";
+    private static final String caminhoTabelaGoto = "/goto.csv";
     private final List<List<String>> tabelaAction;
     private final List<List<String>> tabelaGoto;
 

@@ -6,60 +6,65 @@ public class ArgumentParser {
 
     final List<Argument> expectedArguments;
 
-    public ArgumentParser(final List<Argument> expectedArguments, final String[] args) {
+    public ArgumentParser(final List<Argument> expectedArguments, final String[] args) throws InvalidArgumentException {
         this.expectedArguments = expectedArguments;
 
         for (int i = 0; i < args.length; i++) {
             final String arg = args[i];
 
-            final Argument argument = expectedArguments.stream().filter(argument1 -> ("-" + argument1.getFlag()).equals(arg)).findFirst().orElse(null);
-            if (argument == null) {
-                throw new RuntimeException("Argumentos inválidos!");
-            }
+            if (arg.length() == 2) {
+                final Argument argument = expectedArguments.stream()
+                        .filter(argument1 -> ("-" + argument1.flag).equals(arg)).findFirst().orElse(null);
 
-            if (argument instanceof FlagArgument) {
-                final FlagArgument flagArgument = (FlagArgument) argument;
-                flagArgument.setValue(String.valueOf(!flagArgument.parseBoolValue()));
-                continue;
-            }
+                if (argument == null) {
+                    throw new InvalidArgumentException("Argumentos inválidos!");
+                }
 
-            i++;
-            argument.setValue(args[i]);
+                if (argument.type == ArgumentType.FLAG) {
+                    argument.setValue(String.valueOf(!(boolean) argument.parse()));
+                    continue;
+                }
+
+                i++;
+                argument.setValue(args[i]);
+            }
+            else {
+                final char[] flags = arg.substring(1).toCharArray();
+                for (final char flag : flags) {
+                    final Argument argument = expectedArguments.stream()
+                            .filter(argument1 -> argument1.flag == flag && argument1.type == ArgumentType.FLAG).findFirst().orElse(null);
+
+                    if (argument == null) {
+                        throw new InvalidArgumentException("Argumentos inválidos!");
+                    }
+                    argument.setValue(String.valueOf(!(boolean) argument.parse()));
+                }
+            }
         }
     }
 
     private Argument findArgumentByName(final char flag) {
-        return expectedArguments.stream().filter(argument -> argument.getFlag() == flag).findFirst().orElse(null);
+        return expectedArguments.stream().filter(argument -> argument.flag == flag).findFirst().orElse(null);
     }
 
-    private String buildInvalidTypeError(final Argument argument) {
-        return "Argumento " + argument.getName() + " \"-" + argument.getFlag() + "\" deve ser uma ";
-    }
-
-    public String getStringArgument(final char flag) {
-        final StringArgument argument = ((StringArgument) findArgumentByName(flag));
+    private Object getArgument(final char flag, String expectedType) throws InvalidArgumentException {
+        final Argument argument = findArgumentByName(flag);
         try {
-            return argument.parseStringValue();
+            return argument.parse();
         } catch (Exception ignored) {
-            throw new RuntimeException(buildInvalidTypeError(argument) + "string");
+            throw new InvalidArgumentException("Argumento " + argument.name + " \"-" + argument.flag + "\" deve ser " + expectedType);
         }
     }
 
-    public int getIntArgument(final char flag) {
-        final IntegerArgument argument = ((IntegerArgument) findArgumentByName(flag));
-        try {
-            return argument.parseIntValue();
-        } catch (Exception ignored) {
-            throw new RuntimeException(buildInvalidTypeError(argument) + "inteiro");
-        }
+    public String getStringArgument(final char flag) throws InvalidArgumentException {
+        return (String) getArgument(flag, "string");
     }
 
-    public boolean getBollArgument(final char flag) {
-        final BooleanArgument argument = ((BooleanArgument) findArgumentByName(flag));
-        try {
-            return argument.parseBoolValue();
-        } catch (Exception ignored) {
-            throw new RuntimeException(buildInvalidTypeError(argument) + "booleano");
-        }
+    public int getIntArgument(final char flag) throws InvalidArgumentException {
+        return (int) getArgument(flag, "inteiro");
+    }
+
+    public boolean getBollArgument(final char flag) throws InvalidArgumentException {
+        return (boolean) getArgument(flag, "booleano");
     }
 }

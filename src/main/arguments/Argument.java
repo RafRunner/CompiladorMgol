@@ -1,25 +1,19 @@
 package main.arguments;
 
-public abstract class Argument {
+public class Argument {
 
-    private final String name;
-    private final char flag;
-    protected final String defaultValue;
+    final ArgumentType type;
+    final String name;
+    final char flag;
+    final String defaultValue;
 
     private String value;
 
-    public Argument(final String name, final char flag, final String defaultValue) {
+    public Argument(final ArgumentType type, final String name, final char flag, final String defaultValue) {
+        this.type = type;
         this.name = name;
         this.flag = flag;
         this.defaultValue = defaultValue;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public char getFlag() {
-        return flag;
     }
 
     public void setValue(String value) {
@@ -31,5 +25,9 @@ public abstract class Argument {
             return defaultValue;
         }
         return value;
+    }
+
+    public Object parse() {
+        return type.parse(getValueToParse());
     }
 }

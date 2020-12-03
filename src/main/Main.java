@@ -3,10 +3,10 @@ package main;
 import dominio.Erro;
 import dominio.LeitorArquivos;
 import dominio.enums.Cor;
+import main.arguments.Argument;
 import main.arguments.ArgumentParser;
-import main.arguments.FlagArgument;
-import main.arguments.IntegerArgument;
-import main.arguments.StringArgument;
+import main.arguments.ArgumentType;
+import main.arguments.InvalidArgumentException;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSintatico.AnalisadorSintatico;
 
@@ -22,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length == 0 || args[0].equals("-h")) {
-            imprimeAjuda();
+            imprimeAjuda(true);
             return;
         }
 
@@ -39,13 +39,13 @@ public class Main {
         final ArgumentParser argumentParser;
         try {
             argumentParser = new ArgumentParser(
-                    List.of(new IntegerArgument("verbosidade", 'v', "0"),
-                            new StringArgument("nome arquivo saída", 'o', nomeSaidaDefault),
-                            new FlagArgument("help", 'h', "false"))
+                    List.of(new Argument(ArgumentType.INTEGER, "verbosidade", 'v', "0"),
+                            new Argument(ArgumentType.STRING, "nome arquivo saída", 'o', nomeSaidaDefault),
+                            new Argument(ArgumentType.FLAG, "help", 'h', "false"))
                     , Arrays.copyOfRange(args, 0, args.length - 1));
-        } catch (RuntimeException ignored) {
+        } catch (InvalidArgumentException ignored) {
             Cor.imprimeComCor("Argumentos inválidos! Veja ajuda abaixo:\n", Cor.RED);
-            imprimeAjuda();
+            imprimeAjuda(false);
             return;
         }
 
@@ -53,13 +53,13 @@ public class Main {
         final String nomeArquivoSaida;
         try {
             if (argumentParser.getBollArgument('h')) {
-                imprimeAjuda();
+                imprimeAjuda(false);
                 return;
             }
 
             verbosidade = argumentParser.getIntArgument('v');
             nomeArquivoSaida = argumentParser.getStringArgument('o') + ".c";
-        } catch (RuntimeException e) {
+        } catch (InvalidArgumentException e) {
             Cor.imprimeComCor(e.getMessage(), Cor.RED);
             return;
         }
@@ -85,39 +85,42 @@ public class Main {
         imprimeErrosOuSucesso(erros, nomeArquivoSaida, fim - inicio);
     }
 
-    private static void imprimeAjuda() {
-        Cor.imprimeComCor("                                              ___                  __\n" +
-                "                                       __    /\\_ \\                /\\ \\\n" +
-                "  ___     ___     ___ ___     _____   /\\_\\   \\//\\ \\       __      \\_\\ \\     ___    _ __\n" +
-                " /'___\\  / __`\\ /' __` __`\\  /\\ '__`\\ \\/\\ \\    \\ \\ \\    /'__`\\    /'_` \\   / __`\\ /\\`'__\\\n" +
-                "/\\ \\__/ /\\ \\_\\ \\/\\ \\/\\ \\/\\ \\ \\ \\ \\_\\ \\ \\ \\ \\    \\_\\ \\_ /\\ \\_\\.\\_ /\\ \\_\\ \\ /\\ \\_\\ \\\\ \\ \\/\n" +
-                "\\ \\____\\\\ \\____/\\ \\_\\ \\_\\ \\_\\ \\ \\ ,__/  \\ \\_\\   /\\____\\\\ \\__/.\\_\\\\ \\_____\\\\ \\____/ \\ \\_\\\n" +
-                " \\/____/ \\/___/  \\/_/\\/_/\\/_/  \\ \\ \\/    \\/_/   \\/____/ \\/__/\\/_/ \\/____ / \\/___/   \\/_/\n" +
-                "                                \\ \\_\\\n" +
-                "                                 \\/_/", Cor.YELLOW);
+    private static void imprimeAjuda(final boolean imprimeheader) {
+        if (imprimeheader) {
 
-        Cor.imprimeComCor("          _____                    _____                   _______                   _____\n" +
-                "         /\\    \\                  /\\    \\                 /::\\    \\                 /\\    \\\n" +
-                "        /::\\____\\                /::\\    \\               /::::\\    \\               /::\\____\\\n" +
-                "       /::::|   |               /::::\\    \\             /::::::\\    \\             /:::/    /\n" +
-                "      /:::::|   |              /::::::\\    \\           /::::::::\\    \\           /:::/    /\n" +
-                "     /::::::|   |             /:::/\\:::\\    \\         /:::/~~\\:::\\    \\         /:::/    /\n" +
-                "    /:::/|::|   |            /:::/  \\:::\\    \\       /:::/    \\:::\\    \\       /:::/    /\n" +
-                "   /:::/ |::|   |           /:::/    \\:::\\    \\     /:::/    / \\:::\\    \\     /:::/    /\n" +
-                "  /:::/  |::|___|______    /:::/    / \\:::\\    \\   /:::/____/   \\:::\\____\\   /:::/    /\n" +
-                " /:::/   |::::::::\\    \\  /:::/    /   \\:::\\ ___\\ |:::|    |     |:::|    | /:::/    /\n" +
-                "/:::/    |:::::::::\\____\\/:::/____/  ___\\:::|    ||:::|____|     |:::|----|/:::/____/\n" +
-                "\\::/    / ~~~~~/:::/    /\\:::\\    \\ /\\  /:::|____| \\:::\\    \\   /:::/    / \\:::\\    \\\n" +
-                " \\/____/      /:::/    /  \\:::\\    /::\\ \\::/    /   \\:::\\    \\ /:::/    /   \\:::\\    \\\n" +
-                "             /:::/    /    \\:::\\   \\:::\\ \\/____/     \\:::\\    /:::/    /     \\:::\\    \\\n" +
-                "            /:::/    /      \\:::\\   \\:::\\____\\        \\:::\\__/:::/    /       \\:::\\    \\\n" +
-                "           /:::/    /        \\:::\\  /:::/    /         \\::::::::/    /         \\:::\\    \\\n" +
-                "          /:::/    /          \\:::\\/:::/    /           \\::::::/    /           \\:::\\    \\\n" +
-                "         /:::/    /            \\::::::/    /             \\::::/    /             \\:::\\    \\\n" +
-                "        /:::/    /              \\::::/    /               \\::/____/               \\:::\\____\\\n" +
-                "        \\::/    /                \\::/____/                                         \\::/    /\n" +
-                "         \\/____/                                                                    \\/____/\n" +
-                "\n", Cor.YELLOW);
+            Cor.imprimeComCor("                                              ___                  __\n" +
+                    "                                       __    /\\_ \\                /\\ \\\n" +
+                    "  ___     ___     ___ ___     _____   /\\_\\   \\//\\ \\       __      \\_\\ \\     ___    _ __\n" +
+                    " /'___\\  / __`\\ /' __` __`\\  /\\ '__`\\ \\/\\ \\    \\ \\ \\    /'__`\\    /'_` \\   / __`\\ /\\`'__\\\n" +
+                    "/\\ \\__/ /\\ \\_\\ \\/\\ \\/\\ \\/\\ \\ \\ \\ \\_\\ \\ \\ \\ \\    \\_\\ \\_ /\\ \\_\\.\\_ /\\ \\_\\ \\ /\\ \\_\\ \\\\ \\ \\/\n" +
+                    "\\ \\____\\\\ \\____/\\ \\_\\ \\_\\ \\_\\ \\ \\ ,__/  \\ \\_\\   /\\____\\\\ \\__/.\\_\\\\ \\_____\\\\ \\____/ \\ \\_\\\n" +
+                    " \\/____/ \\/___/  \\/_/\\/_/\\/_/  \\ \\ \\/    \\/_/   \\/____/ \\/__/\\/_/ \\/____ / \\/___/   \\/_/\n" +
+                    "                                \\ \\_\\\n" +
+                    "                                 \\/_/", Cor.YELLOW);
+
+            Cor.imprimeComCor("          _____                    _____                   _______                   _____\n" +
+                    "         /\\    \\                  /\\    \\                 /::\\    \\                 /\\    \\\n" +
+                    "        /::\\____\\                /::\\    \\               /::::\\    \\               /::\\____\\\n" +
+                    "       /::::|   |               /::::\\    \\             /::::::\\    \\             /:::/    /\n" +
+                    "      /:::::|   |              /::::::\\    \\           /::::::::\\    \\           /:::/    /\n" +
+                    "     /::::::|   |             /:::/\\:::\\    \\         /:::/~~\\:::\\    \\         /:::/    /\n" +
+                    "    /:::/|::|   |            /:::/  \\:::\\    \\       /:::/    \\:::\\    \\       /:::/    /\n" +
+                    "   /:::/ |::|   |           /:::/    \\:::\\    \\     /:::/    / \\:::\\    \\     /:::/    /\n" +
+                    "  /:::/  |::|___|______    /:::/    / \\:::\\    \\   /:::/____/   \\:::\\____\\   /:::/    /\n" +
+                    " /:::/   |::::::::\\    \\  /:::/    /   \\:::\\ ___\\ |:::|    |     |:::|    | /:::/    /\n" +
+                    "/:::/    |:::::::::\\____\\/:::/____/  ___\\:::|    ||:::|____|     |:::|----|/:::/____/\n" +
+                    "\\::/    / ~~~~~/:::/    /\\:::\\    \\ /\\  /:::|____| \\:::\\    \\   /:::/    / \\:::\\    \\\n" +
+                    " \\/____/      /:::/    /  \\:::\\    /::\\ \\::/    /   \\:::\\    \\ /:::/    /   \\:::\\    \\\n" +
+                    "             /:::/    /    \\:::\\   \\:::\\ \\/____/     \\:::\\    /:::/    /     \\:::\\    \\\n" +
+                    "            /:::/    /      \\:::\\   \\:::\\____\\        \\:::\\__/:::/    /       \\:::\\    \\\n" +
+                    "           /:::/    /        \\:::\\  /:::/    /         \\::::::::/    /         \\:::\\    \\\n" +
+                    "          /:::/    /          \\:::\\/:::/    /           \\::::::/    /           \\:::\\    \\\n" +
+                    "         /:::/    /            \\::::::/    /             \\::::/    /             \\:::\\    \\\n" +
+                    "        /:::/    /              \\::::/    /               \\::/____/               \\:::\\____\\\n" +
+                    "        \\::/    /                \\::/____/                                         \\::/    /\n" +
+                    "         \\/____/                                                                    \\/____/\n" +
+                    "\n", Cor.YELLOW);
+        }
 
         Cor.imprimeComCor("\nUso: CompiladorMgol [modificadores] <arquivo fonte>", Cor.WHITE);
 

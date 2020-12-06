@@ -9,7 +9,6 @@ import main.arguments.ArgumentType;
 import main.arguments.InvalidArgumentException;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSemantico.AnalisadorSemantico;
-import partesCompilador.analisadorSemantico.ErroSemanticoException;
 import partesCompilador.analisadorSintatico.AnalisadorSintatico;
 
 import java.io.BufferedWriter;
@@ -87,7 +86,7 @@ public class Main {
 
         final long inicio = System.currentTimeMillis();
         analisadorSintatico.analisa();
-        analisadorSemantico.fechaArquivo(output);
+        analisadorSemantico.escreveArquivo(output);
         final long fim = System.currentTimeMillis();
 
         imprimeErrosOuSucesso(erros, nomeArquivoSaida, fim - inicio);

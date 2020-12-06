@@ -15,10 +15,6 @@ public class NaoTerminalEAtributos {
         this.atributos = atributos;
     }
 
-    public NaoTerminal getNaoTerminal() {
-        return naoTerminal;
-    }
-
     public TokenEAtributos getAtributos() {
         return atributos;
     }

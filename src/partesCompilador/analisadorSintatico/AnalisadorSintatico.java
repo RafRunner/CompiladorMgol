@@ -1,14 +1,12 @@
 package partesCompilador.analisadorSintatico;
 
 import dominio.Analisador;
-import dominio.NaoTerminalEAtributos;
 import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
 import dominio.enums.Cor;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSemantico.AnalisadorSemantico;
-import partesCompilador.analisadorSemantico.ErroSemanticoException;
 import partesCompilador.analisadorSintatico.tabela.*;
 
 import java.io.IOException;

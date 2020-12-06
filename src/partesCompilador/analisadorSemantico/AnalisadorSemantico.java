@@ -2,7 +2,6 @@ package partesCompilador.analisadorSemantico;
 
 import dominio.*;
 import dominio.enums.Cor;
-import dominio.enums.Token;
 import partesCompilador.analisadorSintatico.RegraGramatical;
 
 import java.io.BufferedWriter;
@@ -13,7 +12,7 @@ public class AnalisadorSemantico extends Analisador {
 
     private final Deque<Object> pilhaSemantica = new ArrayDeque<>();
     private final StringBuilder output = new StringBuilder();
-    private Integer nVariaveisTemp = 0;
+    private final List<String> variaveisTemporarias = new ArrayList<>();
 
     public AnalisadorSemantico(final List<Erro> erros, final int verbosidade) {
         super(erros, verbosidade, Cor.GREEN);
@@ -24,7 +23,6 @@ public class AnalisadorSemantico extends Analisador {
     }
 
     public void aplicaRegraSemantica(final RegraGramatical regraGramatical) throws IOException {
-
         final NaoTerminalEAtributos ladoEsquerdo = regraGramatical.getLadoEsquedo().darAtributos();
         final List<Object> ladoDireito = regraGramatical.getLadoDireito();
 
@@ -35,23 +33,26 @@ public class AnalisadorSemantico extends Analisador {
         }
 
         try {
-            var regraSemantica = RegraSemantica.values()[regraGramatical.ordinal()];
-            regraSemantica.aplicar(ladoEsquerdo, ladoDireitoContextualizado, nVariaveisTemp, output);
-            if (regraSemantica.criaVariavelTemp) {
-                nVariaveisTemp++;
-            }
+            RegraSemantica.values()[regraGramatical.ordinal()].aplicar(ladoEsquerdo, ladoDireitoContextualizado, variaveisTemporarias, output);
         } catch (ErroSemanticoException e) {
-            criaRegistraEImprimeErro(e.getMensagem(), e.getLinha(), e.getColuna());
+            criaRegistraEImprimeErro("Erro semântico: " + e.getMensagem(), e.getLinha(), e.getColuna());
         }
 
         pilhaSemantica.push(ladoEsquerdo);
     }
 
-    public void fechaArquivo(BufferedWriter arqSaida) throws IOException {
+    public void escreveArquivo(BufferedWriter arqSaida) throws IOException {
         var cabecalho = new StringBuilder();
         cabecalho.append("#include <stdio.h>\n")
                 .append("\ntypedef char literal[256];\n\n")
                 .append("int main() {\n")
+                .append("/*----Variaveis temporarias----*/\n");
+
+        for (var variavelTemporaria : variaveisTemporarias) {
+            cabecalho.append(variavelTemporaria);
+        }
+
+        cabecalho.append("/*------------------------------*/\n")
                 .append(output);
 
         arqSaida.append(cabecalho);

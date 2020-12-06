@@ -6,9 +6,9 @@ inicio
         C real;
     varfim;
 
-    escreva "Digite B";
+    escreva "Digite B: ";
     leia B;
-    escreva "Digite A:";
+    escreva "Digite A: ";
     leia A;
     se(B>2)
     entao
@@ -24,7 +24,7 @@ inicio
     D<-B;
     C<-5.0;
 
-    escreva "\nB=\n";
+    escreva "\nB=";
     escreva D;
     escreva "\n";
     escreva C;

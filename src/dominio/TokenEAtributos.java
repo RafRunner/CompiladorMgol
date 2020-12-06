@@ -8,7 +8,7 @@ import java.util.Objects;
 public class TokenEAtributos {
 
     private final Token token;
-    private final String lexema;
+    private String lexema;
     private Tipo tipo;
 
     public TokenEAtributos(final Token token, final String lexema, final Tipo tipo) {
@@ -35,6 +35,10 @@ public class TokenEAtributos {
 
     public void setTipo(final Tipo tipo) {
         this.tipo = tipo;
+    }
+
+    public void setLexema(String lexema) {
+        this.lexema = lexema;
     }
 
     public TokenLocalizado localizar(final int linha, final int coluna) {

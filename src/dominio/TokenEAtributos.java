@@ -17,6 +17,10 @@ public class TokenEAtributos {
         this.tipo = tipo;
     }
 
+    public TokenEAtributos() {
+        this(null, null, null);
+    }
+
     public Token getToken() {
         return token;
     }

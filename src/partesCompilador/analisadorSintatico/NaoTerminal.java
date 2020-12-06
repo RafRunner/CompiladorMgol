@@ -1,5 +1,7 @@
 package partesCompilador.analisadorSintatico;
 
+import dominio.NaoTerminalEAtributos;
+import dominio.TokenEAtributos;
 import dominio.enums.Token;
 
 import java.util.Set;
@@ -33,5 +35,9 @@ public enum NaoTerminal {
 
     public Set<Token> getTokensSincronizacao() {
         return tokensSincronizacao;
+    }
+
+    public NaoTerminalEAtributos darAtributos() {
+        return new NaoTerminalEAtributos(this, new TokenEAtributos());
     }
 }

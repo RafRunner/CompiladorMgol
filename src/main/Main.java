@@ -8,9 +8,14 @@ import main.arguments.ArgumentParser;
 import main.arguments.ArgumentType;
 import main.arguments.InvalidArgumentException;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
+import partesCompilador.analisadorSemantico.AnalisadorSemantico;
+import partesCompilador.analisadorSemantico.ErroSemanticoException;
 import partesCompilador.analisadorSintatico.AnalisadorSintatico;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -20,7 +25,7 @@ public class Main {
     private final static String stringFormatosSuportados = String.join(" ou ", formatosSuportados);
     private final static String regexFormatos = "\\.(" + String.join("|", formatosSuportados) + ")$";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length == 0 || args[0].equals("-h")) {
             imprimeAjuda(true);
             return;
@@ -74,12 +79,15 @@ public class Main {
         }
 
         final List<Erro> erros = new ArrayList<>();
+        final BufferedWriter output = new BufferedWriter(new FileWriter(nomeArquivoSaida));
 
         final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, erros, verbosidade);
-        final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico, verbosidade);
+        final AnalisadorSemantico analisadorSemantico = new AnalisadorSemantico(erros, output, verbosidade);
+        final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico, analisadorSemantico, verbosidade);
 
         final long inicio = System.currentTimeMillis();
         analisadorSintatico.analisa();
+        analisadorSemantico.fechaArquivo();
         final long fim = System.currentTimeMillis();
 
         imprimeErrosOuSucesso(erros, nomeArquivoSaida, fim - inicio);

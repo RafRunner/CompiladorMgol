@@ -1,17 +1,13 @@
 inicio
     varinicio
-        A lit;
-        B inteiro;
+    B inteiro;
+    A real;
     varfim;
 
     B<- 2 * 4;
+    escreva"3";
+    B<-B;
+    A<-B;
+fim
 
-    ABACATE<-ABACATE*varfim;
-
-    A<-@;
-
-    se (B < 3)
-    entao
-        escreva"3";
-        B<-B+1;
-    fimse
+{TIPO(tipo=inteiro)}

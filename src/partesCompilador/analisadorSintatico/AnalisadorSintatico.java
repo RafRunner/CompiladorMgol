@@ -1,13 +1,17 @@
 package partesCompilador.analisadorSintatico;
 
 import dominio.Analisador;
+import dominio.NaoTerminalEAtributos;
 import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
 import dominio.enums.Cor;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.AnalisadorLexico;
+import partesCompilador.analisadorSemantico.AnalisadorSemantico;
+import partesCompilador.analisadorSemantico.ErroSemanticoException;
 import partesCompilador.analisadorSintatico.tabela.*;
 
+import java.io.IOException;
 import java.util.*;
 
 public class AnalisadorSintatico extends Analisador {
@@ -15,13 +19,15 @@ public class AnalisadorSintatico extends Analisador {
     private final Deque<Integer> pilhaEstados = new ArrayDeque<>();
     private final TabelaSintatica tabelaSintatica = new TabelaSintatica();
     private final AnalisadorLexico analisadorLexico;
+    private final AnalisadorSemantico analisadorSemantico;
 
-    public AnalisadorSintatico(final AnalisadorLexico analisadorLexico, final int verbosidade) {
+    public AnalisadorSintatico(final AnalisadorLexico analisadorLexico, final AnalisadorSemantico analisadorSemantico, final int verbosidade) {
         super(analisadorLexico.getErros(), verbosidade, Cor.CYAN);
         this.analisadorLexico = analisadorLexico;
+        this.analisadorSemantico = analisadorSemantico;
     }
 
-    public void analisa() {
+    public void analisa() throws IOException {
         TokenLocalizado tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
 
         // Iniciando variáveis axiliares para o tratamento de erro
@@ -42,6 +48,7 @@ public class AnalisadorSintatico extends Analisador {
                 pilhaEstados.push(novoEstado);
 
                 tokenAnterior = tokenAtual;
+                analisadorSemantico.empilhaToken(tokenAtual);
                 tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
 
                 // Salvando o pilha da linha anterior antes de ir para a nova linha que pode conter erros (a linha será ignorada se tiver)
@@ -53,6 +60,8 @@ public class AnalisadorSintatico extends Analisador {
 
             else if (action instanceof Reduce) {
                 final RegraGramatical regra = ((Reduce) action).getRegraGramatical();
+
+                analisadorSemantico.aplicaRegraSemantica(regra);
 
                 for (int i = 0; i < regra.getLadoDireito().size(); i++) {
                     pilhaEstados.pop();

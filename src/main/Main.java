@@ -82,12 +82,12 @@ public class Main {
         final BufferedWriter output = new BufferedWriter(new FileWriter(nomeArquivoSaida));
 
         final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, erros, verbosidade);
-        final AnalisadorSemantico analisadorSemantico = new AnalisadorSemantico(erros, output, verbosidade);
+        final AnalisadorSemantico analisadorSemantico = new AnalisadorSemantico(erros, verbosidade);
         final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico, analisadorSemantico, verbosidade);
 
         final long inicio = System.currentTimeMillis();
         analisadorSintatico.analisa();
-        analisadorSemantico.fechaArquivo();
+        analisadorSemantico.fechaArquivo(output);
         final long fim = System.currentTimeMillis();
 
         imprimeErrosOuSucesso(erros, nomeArquivoSaida, fim - inicio);

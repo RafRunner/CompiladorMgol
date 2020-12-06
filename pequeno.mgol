@@ -1,11 +1,13 @@
 inicio
     varinicio
-    B inteiro;
-    A real;
+        B inteiro;
+        A real;
     varfim;
 
     B<- 2 * 4;
     escreva"3";
+    escreva 2e10;
+    escreva 2.5;
     B<-B;
     A<-B;
 fim

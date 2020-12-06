@@ -11,8 +11,7 @@ import java.util.*;
 
 public class AnalisadorSemantico extends Analisador {
 
-    private final List<TokenLocalizado> pilhaTokens = new ArrayList<>();
-    private final Deque<NaoTerminalEAtributos> pilhaNaoTerminais = new ArrayDeque<>();
+    private final Deque<Object> pilhaSemantica = new ArrayDeque<>();
     private final BufferedWriter output;
 
     public AnalisadorSemantico(final List<Erro> erros, final BufferedWriter output, final int verbosidade) {
@@ -21,11 +20,7 @@ public class AnalisadorSemantico extends Analisador {
     }
 
     public void empilhaToken(final TokenLocalizado token) {
-        pilhaTokens.add(0, token);
-    }
-
-    public void empilhaNaoTermina(final NaoTerminalEAtributos naoTerminal) {
-        pilhaNaoTerminais.push(naoTerminal);
+        pilhaSemantica.push(token);
     }
 
     public void aplicaRegraSemantica(final RegraGramatical regraGramatical) throws IOException {
@@ -35,14 +30,10 @@ public class AnalisadorSemantico extends Analisador {
 
         final List<Object> ladoDireitoContextualizado = new ArrayList<>();
 
-        for (final Object o : ladoDireito) {
-            if (o instanceof Token) {
-                ladoDireitoContextualizado.add(pilhaTokens.remove(2));
-            }
-            else {
-                ladoDireitoContextualizado.add(pilhaNaoTerminais.pop());
-            }
+        for (int i = 0; i < ladoDireito.size(); i++) {
+            ladoDireitoContextualizado.add(pilhaSemantica.pop());
         }
+        Collections.reverse(ladoDireitoContextualizado);
 
         try {
             RegraSemantica.values()[regraGramatical.ordinal()].aplicar(ladoEsquesdo, ladoDireitoContextualizado, output);
@@ -50,7 +41,7 @@ public class AnalisadorSemantico extends Analisador {
             criaRegistraEImprimeErro(e.getMensagem(), e.getLinha(), e.getColuna());
         }
 
-        pilhaNaoTerminais.push(ladoEsquesdo);
+        pilhaSemantica.push(ladoEsquesdo);
     }
 
     public void fechaArquivo() throws IOException {

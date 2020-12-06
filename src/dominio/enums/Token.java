@@ -54,10 +54,6 @@ public enum Token {
     // Fica no final pois comentários são ignorados pelo analisador sintático e não está na tabela sintática
     comentario;
 
-    public TokenEAtributos darAtributos(final String lexema, final Tipo tipo) {
-        return new TokenEAtributos(this, lexema, tipo);
-    }
-
     public TokenEAtributos darAtributos(final String lexema) {
         return new TokenEAtributos(this, lexema, null);
     }

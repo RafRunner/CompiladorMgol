@@ -5,6 +5,7 @@ import dominio.Erro;
 import dominio.TokenEAtributos;
 import dominio.TokenLocalizado;
 import dominio.enums.Cor;
+import dominio.enums.Tipo;
 import dominio.enums.Token;
 import partesCompilador.analisadorLexico.excecoes.EstadoDeErroException;
 import partesCompilador.analisadorLexico.excecoes.FimDeTokenValidoException;
@@ -57,7 +58,7 @@ public class AnalisadorLexico extends Analisador {
         while (tokenLocalizado.getToken() == Token.comentario) {
             tokenLocalizado = lerProximoToken();
         }
-        
+
         return tokenLocalizado;
     }
 
@@ -109,6 +110,20 @@ public class AnalisadorLexico extends Analisador {
             coluna--;
             final Token token = DFA.getEstado().getTokenAssociado();
             TokenEAtributos tokenEAtributos = token.darAtributos(lexema.toString());
+
+            switch (token) {
+                case inteiro: tokenEAtributos.setTipo(Tipo.INTEIRO); break;
+                case real: tokenEAtributos.setTipo(Tipo.REAL); break;
+                case literal: tokenEAtributos.setTipo(Tipo.LITERAL); break;
+                case num:
+                    try {
+                        Integer.parseInt(tokenEAtributos.getLexema());
+                        tokenEAtributos.setTipo(Tipo.INTEIRO);
+                    } catch (NumberFormatException ignored) {
+                        tokenEAtributos.setTipo(Tipo.REAL);
+                    }
+                    break;
+            }
 
             if (token == Token.id) {
                 final TokenEAtributos tokenJaNaTabela = tabelaDeSimbolos.get(lexema.toString());

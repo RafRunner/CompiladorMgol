@@ -53,14 +53,9 @@ enum RegraSemantica {
 
         if (id.getTipo() != null) {
             switch (id.getTipo()) {
-                case LITERAL:
-                    output.append("scanf(\"%s\", ");
-                    break;
-                case INTEIRO:
-                    output.append("scanf(\"%d\", &");
-                    break;
-                case REAL:
-                    output.append("scanf(\"%f\", &");
+                case LITERAL: output.append("scanf(\"%s\", "); break;
+                case INTEIRO: output.append("scanf(\"%d\", &"); break;
+                case REAL: output.append("scanf(\"%f\", &");
             }
             output.append(id.getLexema()).append(");");
         }
@@ -72,7 +67,13 @@ enum RegraSemantica {
     R12((ladoEsquerdo, ladoDireito, output) -> {
         final var ARG = (NaoTerminalEAtributos) ladoDireito.get(1);
 
-        output.append("printf(\"").append(ARG.getLexema()).append("\");\n");
+        switch (ARG.getTipo()) {
+            case LITERAL: output.append("printf(").append(ARG.getLexema()); break;
+            case INTEIRO: output.append("printf(\"%d\", ").append(ARG.getLexema()); break;
+            case REAL: output.append("printf(\"%f\", ").append(ARG.getLexema()); break;
+        }
+
+        output.append(");\n");
     }),
 
     R13((ladoEsquerdo, ladoDireito, output) -> {
@@ -107,7 +108,7 @@ enum RegraSemantica {
                 output.append(id.getLexema()).append("=").append(LD.getLexema());
             }
             else {
-                throw new ErroSemanticoException("Variável " + id.getLexema() + " é do tipo." + id.getTipo() + ", não " +LD.getTipo(), id.getLinha(), id.getColuna());
+                throw new ErroSemanticoException("Variável " + id.getLexema() + " é do tipo " + id.getTipo() + ", não " +LD.getTipo(), id.getLinha(), id.getColuna());
             }
         }
         else {

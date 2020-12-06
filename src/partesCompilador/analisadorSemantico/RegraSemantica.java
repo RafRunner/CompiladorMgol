@@ -3,6 +3,7 @@ package partesCompilador.analisadorSemantico;
 import dominio.NaoTerminalEAtributos;
 import dominio.TokenLocalizado;
 import dominio.enums.Tipo;
+import dominio.enums.Token;
 
 import java.io.IOException;
 import java.util.List;
@@ -73,13 +74,18 @@ enum RegraSemantica {
     R12((ladoEsquerdo, ladoDireito, listaVTemp, output) -> {
         final var ARG = (NaoTerminalEAtributos) ladoDireito.get(1);
 
+        output.append("printf(");
         switch (ARG.getTipo()) {
-            case LITERAL: output.append("printf(\"%s\", ").append(ARG.getLexema()); break;
-            case INTEIRO: output.append("printf(\"%d\", ").append(ARG.getLexema()); break;
-            case REAL: output.append("printf(\"%f\", ").append(ARG.getLexema()); break;
+            case LITERAL:
+                if (ARG.getToken() == Token.id) {
+                    output.append("\"%s\", ");
+                }
+                break;
+            case INTEIRO: output.append("\"%d\", "); break;
+            case REAL: output.append("\"%f\", "); break;
         }
 
-        output.append(");\n");
+        output.append(ARG.getLexema()).append(");\n");
     }),
 
     R13((ladoEsquerdo, ladoDireito, listaVTemp, output) -> {

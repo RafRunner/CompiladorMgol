@@ -9,7 +9,7 @@ inicio
     escreva 2e10;
     escreva 2.5;
     B<-B;
-    A<-B;
+    A<-12.5 * 3.0;
 fim
 
 {TIPO(tipo=inteiro)}

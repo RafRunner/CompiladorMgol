@@ -77,19 +77,31 @@ public class Main {
             return;
         }
 
+        final long inicio = System.currentTimeMillis();
+
         final List<Erro> erros = new ArrayList<>();
-        final BufferedWriter output = new BufferedWriter(new FileWriter(nomeArquivoSaida));
 
         final AnalisadorLexico analisadorLexico = new AnalisadorLexico(codigoFonte, erros, verbosidade);
         final AnalisadorSemantico analisadorSemantico = new AnalisadorSemantico(erros, verbosidade);
         final AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(analisadorLexico, analisadorSemantico, verbosidade);
 
-        final long inicio = System.currentTimeMillis();
         analisadorSintatico.analisa();
-        analisadorSemantico.escreveArquivo(output);
-        final long fim = System.currentTimeMillis();
 
-        imprimeErrosOuSucesso(erros, nomeArquivoSaida, fim - inicio);
+        if (erros.size() != 0) {
+            Cor.imprimeComCor("\nCompilação não concluída por erros. Resumo dos erros:", Cor.BLUE);
+            Cor.imprimeComCor("---------------------------------------------------------------------------------------------------------", Cor.BLUE);
+            for (final Erro r : erros) {
+                Cor.imprimeComCor(r.toString(), Cor.RED);
+            }
+            System.out.println();
+        }
+        else {
+            final BufferedWriter output = new BufferedWriter(new FileWriter(nomeArquivoSaida));
+            analisadorSemantico.escreveArquivo(output);
+            final long tempo = System.currentTimeMillis() - inicio;
+
+            Cor.imprimeComCor("\nCompilação concluída com sucesso em " + tempo + "ms. Arquivo de saída: " + nomeArquivoSaida + "\n", Cor.BLUE);
+        }
     }
 
     private static void imprimeAjuda(final boolean imprimeheader) {
@@ -147,19 +159,5 @@ public class Main {
         Cor.imprimeComCor("\n\t-o (saída): argumento para definir o caminho e nome do arquivo de saída. Ex: -o ~/Documents/saida", Cor.PURPLE);
 
         Cor.imprimeComCor("\nFeito por: Rafael Nunes Santana e Armando Soares e Silva Neto.\n", Cor.GREEN);
-    }
-
-    private static void imprimeErrosOuSucesso(final List<Erro> erros, final String nomeArquivoSaida, final long tempo) {
-        if (erros.size() != 0) {
-            Cor.imprimeComCor("\nCompilação não concluída por erros. Resumo dos erros:", Cor.BLUE);
-            Cor.imprimeComCor("---------------------------------------------------------------------------------------------------------", Cor.BLUE);
-            for (final Erro r : erros) {
-                Cor.imprimeComCor(r.toString(), Cor.RED);
-            }
-            System.out.println();
-        }
-        else {
-            Cor.imprimeComCor("\nCompilação concluída com sucesso em " + tempo + "ms. Arquivo de saída: " + nomeArquivoSaida + "\n", Cor.BLUE);
-        }
     }
 }

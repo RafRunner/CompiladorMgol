@@ -52,10 +52,10 @@ public class AnalisadorSemantico extends Analisador {
             cabecalho.append(variavelTemporaria);
         }
 
-        cabecalho.append("/*------------------------------*/\n")
-                .append(output);
+        cabecalho.append("/*------------------------------*/\n");
 
         arqSaida.append(cabecalho);
+        arqSaida.append(output);
         arqSaida.close();
     }
 }

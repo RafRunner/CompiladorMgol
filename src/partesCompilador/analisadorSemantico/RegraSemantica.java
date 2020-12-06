@@ -9,15 +9,15 @@ import java.util.List;
 
 enum RegraSemantica {
 
-    R1(),
+    R1,
 
     R2((ladoEsquerdo, ladoDireito, listaVTemp, output) -> {
         output.append("\nreturn 0;\n}\n");
     }),
 
-    R3(),
+    R3,
 
-    R4(),
+    R4,
 
     R5((ladoEsquerdo, ladoDireito, listaVTemp, output) -> {
         output.append("\n\n\n");
@@ -47,7 +47,7 @@ enum RegraSemantica {
         ladoEsquerdo.getAtributos().setTipo(Tipo.LITERAL);
     }),
 
-    R10(),
+    R10,
 
     R11((ladoEsquerdo, ladoDireito, listaVTemp, output) -> {
         final var id = (TokenLocalizado) ladoDireito.get(1);
@@ -103,7 +103,7 @@ enum RegraSemantica {
         ladoEsquerdo.setAtributos(id.getTokenEAtributos());
     }),
 
-    R16(),
+    R16,
 
     R17((ladoEsquerdo, ladoDireito, listaVTemp, output) -> {
         final var id = (TokenLocalizado) ladoDireito.get(0);
@@ -159,7 +159,7 @@ enum RegraSemantica {
         ladoEsquerdo.setAtributos(num.getTokenEAtributos());
     }),
 
-    R22(),
+    R22,
 
     R23((ladoEsquerdo, ladoDireito, listaVTemp, output) -> {
         output.append("}\n");
@@ -192,15 +192,15 @@ enum RegraSemantica {
         }
     }, true),
 
-    R26(),
+    R26,
 
-    R27(),
+    R27,
 
-    R28(),
+    R28,
 
-    R29(),
+    R29,
 
-    R30();
+    R30;
 
     private interface Regra {
         void aplicar(final NaoTerminalEAtributos ladoEsquerdo,

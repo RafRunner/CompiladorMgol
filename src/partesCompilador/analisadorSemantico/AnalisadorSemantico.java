@@ -14,15 +14,20 @@ public class AnalisadorSemantico extends Analisador {
     private final StringBuilder output = new StringBuilder();
     private final List<String> variaveisTemporarias = new ArrayList<>();
 
+    private boolean erroNaGeracao = false;
+
     public AnalisadorSemantico(final List<Erro> erros, final int verbosidade) {
         super(erros, verbosidade, Cor.GREEN);
     }
 
     public void empilhaToken(final TokenLocalizado token) {
+        if (erroNaGeracao) return;
         pilhaSemantica.push(token);
     }
 
-    public void aplicaRegraSemantica(final RegraGramatical regraGramatical) throws IOException {
+    public void aplicaRegraSemantica(final RegraGramatical regraGramatical) {
+        if (erroNaGeracao) return;
+
         final NaoTerminalEAtributos ladoEsquerdo = regraGramatical.getLadoEsquedo().darAtributos();
         final List<Object> ladoDireito = regraGramatical.getLadoDireito();
 
@@ -36,6 +41,10 @@ public class AnalisadorSemantico extends Analisador {
             RegraSemantica.values()[regraGramatical.ordinal()].aplicar(ladoEsquerdo, ladoDireitoContextualizado, variaveisTemporarias, output);
         } catch (ErroSemanticoException e) {
             criaRegistraEImprimeErro("Erro semântico: " + e.getMensagem(), e.getLinha(), e.getColuna());
+        } catch (Exception ignored) {
+            // Caso um erro inesperado occorra na geração de código, não será possível mais gerar o programa objeto e marcamos essa flag
+            erroNaGeracao = true;
+            return;
         }
 
         pilhaSemantica.push(ladoEsquerdo);

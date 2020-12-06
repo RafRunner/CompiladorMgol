@@ -4,7 +4,7 @@ public enum Tipo {
 
     INTEIRO("int"),
     LITERAL("literal"),
-    REAL("float");
+    REAL("double");
 
     private final String tipoEmC;
 

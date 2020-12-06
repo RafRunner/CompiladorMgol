@@ -94,14 +94,15 @@ public class Main {
                 Cor.imprimeComCor(r.toString(), Cor.RED);
             }
             System.out.println();
+            return;
         }
-        else {
-            final BufferedWriter output = new BufferedWriter(new FileWriter(nomeArquivoSaida));
-            analisadorSemantico.escreveArquivo(output);
-            final long tempo = System.currentTimeMillis() - inicio;
 
-            Cor.imprimeComCor("\nCompilação concluída com sucesso em " + tempo + "ms. Arquivo de saída: " + nomeArquivoSaida + "\n", Cor.BLUE);
-        }
+        // Sem erro: Vamos gerar o arquivo com o código objeto
+        final BufferedWriter output = new BufferedWriter(new FileWriter(nomeArquivoSaida));
+        analisadorSemantico.escreveArquivo(output);
+        final long tempo = System.currentTimeMillis() - inicio;
+
+        Cor.imprimeComCor("\nCompilação concluída com sucesso em " + tempo + "ms. Arquivo de saída: " + nomeArquivoSaida + "\n", Cor.BLUE);
     }
 
     private static void imprimeAjuda(final boolean imprimeheader) {

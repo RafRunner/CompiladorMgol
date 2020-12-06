@@ -30,4 +30,5 @@ inicio
     escreva C;
     escreva "\n";
     escreva A;
+    escreva "\n";
 fim

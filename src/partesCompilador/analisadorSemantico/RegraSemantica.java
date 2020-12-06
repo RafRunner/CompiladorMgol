@@ -58,7 +58,7 @@ enum RegraSemantica {
             switch (id.getTipo()) {
                 case LITERAL: output.append(" %[^\\n]s\", "); break;
                 case INTEIRO: output.append("%d\", &"); break;
-                case REAL: output.append("%f\", &"); break;
+                case REAL: output.append("%lf\", &"); break;
             }
             output.append(id.getLexema()).append(");\n");
 
@@ -82,7 +82,7 @@ enum RegraSemantica {
                 }
                 break;
             case INTEIRO: output.append("\"%d\", "); break;
-            case REAL: output.append("\"%f\", "); break;
+            case REAL: output.append("\"%lf\", "); break;
         }
 
         output.append(ARG.getLexema()).append(");\n");
@@ -143,7 +143,7 @@ enum RegraSemantica {
         else {
             throw new ErroSemanticoException("Operados com tipos incompatíveis " + OPRD1.getTipo() + " e " + OPRD2.getTipo(), opm.getLinha(), opm.getColuna());
         }
-    }, true),
+    }),
 
     R19((ladoEsquerdo, ladoDireito, listaVTemp, output) -> {
         final var OPRD1 = (NaoTerminalEAtributos) ladoDireito.get(0);
@@ -196,7 +196,7 @@ enum RegraSemantica {
         else {
             throw new ErroSemanticoException("Operados com tipos incompatíveis " + OPRD1.getTipo() + " e " + OPRD2.getTipo(), opr.getLinha(), opr.getColuna());
         }
-    }, true),
+    }),
 
     R26,
 
@@ -216,19 +216,13 @@ enum RegraSemantica {
     }
 
     private final Regra regra;
-    final boolean criaVariavelTemp;
-
-    RegraSemantica(final Regra regra, final boolean criaVariavelTemp) {
-        this.regra = regra;
-        this.criaVariavelTemp = criaVariavelTemp;
-    }
 
     RegraSemantica(final Regra regra) {
-        this(regra,false);
+        this.regra = regra;
     }
 
     RegraSemantica() {
-        this((ladoEsquerdo, ladoDireito, listaVTemp, output) -> { },false);
+        this((ladoEsquerdo, ladoDireito, listaVTemp, output) -> { });
     }
 
     public void aplicar(final NaoTerminalEAtributos ladoEsquerdo,

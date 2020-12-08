@@ -1,0 +1,41 @@
+inicio
+    varinicio
+        A real;
+        B real;
+        operacao inteiro;
+        resultado real;
+    varfim;
+
+    escreva "Bem vindo à calculadora MGOL. É possível fazer operações do tipo A <operação> B\n";
+    escreva "Digite A: ";
+    leia A;
+    escreva "Digite B: ";
+    leia B;
+
+    escreva "Digite a operação (+ = 1, - = 2, * = 3, / = 4): ";
+    leia operacao;
+
+    se (operacao = 1)
+    entao
+        resultado <- A + B;
+    fimse
+
+    se (operacao = 2)
+    entao
+        resultado <- A - B;
+    fimse
+
+    se (operacao = 3)
+    entao
+        resultado <- A * B;
+    fimse
+
+    se (operacao = 4)
+    entao
+        resultado <- A / B;
+    fimse
+
+    escreva "Resultado: ";
+    escreva resultado;
+    escreva "\n";
+fim

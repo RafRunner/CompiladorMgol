@@ -123,20 +123,20 @@ public class AnalisadorLexico extends Analisador {
                         tokenEAtributos.setTipo(Tipo.REAL);
                     }
                     break;
+                case id:
+                    final TokenEAtributos tokenJaNaTabela = tabelaDeSimbolos.get(lexema.toString());
+
+                    // Já está na tebela, então pegamos a versão na tabela
+                    if (tokenJaNaTabela != null) {
+                        tokenEAtributos = tokenJaNaTabela;
+                    }
+                    // Não está na tebela, então colocamos
+                    else {
+                        tabelaDeSimbolos.put(lexema.toString(), tokenEAtributos);
+                    }
+                    break;
             }
 
-            if (token == Token.id) {
-                final TokenEAtributos tokenJaNaTabela = tabelaDeSimbolos.get(lexema.toString());
-
-                // Já está na tebela, então pegamos a versão na tabela
-                if (tokenJaNaTabela != null) {
-                    tokenEAtributos = tokenJaNaTabela;
-                }
-                // Não está na tebela, então colocamos
-                else {
-                    tabelaDeSimbolos.put(lexema.toString(), tokenEAtributos);
-                }
-            }
             imprimeInfo(tokenEAtributos);
 
             return tokenEAtributos.localizar(linha, coluna);

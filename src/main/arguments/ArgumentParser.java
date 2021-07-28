@@ -25,7 +25,7 @@ public class ArgumentParser {
                 }
 
                 if (argument.type == ArgumentType.FLAG) {
-                    argument.setValue(String.valueOf(!(boolean) argument.parse()));
+                    argument.setValue("true");
                     continue;
                 }
 
@@ -41,7 +41,7 @@ public class ArgumentParser {
                     if (argument == null) {
                         throw new InvalidArgumentException("Argumentos inválidos!");
                     }
-                    argument.setValue(String.valueOf(!(boolean) argument.parse()));
+                    argument.setValue("true");
                 }
             }
         }

@@ -50,7 +50,7 @@ public class AnalisadorSemantico extends Analisador {
         pilhaSemantica.push(ladoEsquerdo);
     }
 
-    public void escreveArquivo(BufferedWriter arqSaida) throws IOException {
+    public void escreveArquivo(final BufferedWriter arqSaida) throws IOException {
         var cabecalho = new StringBuilder();
         cabecalho.append("#include <stdio.h>\n")
                 .append("\ntypedef char literal[256];\n\n")

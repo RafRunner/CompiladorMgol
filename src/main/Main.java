@@ -43,9 +43,9 @@ public class Main {
         final ArgumentParser argumentParser;
         try {
             argumentParser = new ArgumentParser(
-                    List.of(new Argument(ArgumentType.INTEGER, "verbosidade", 'v', "0"),
-                            new Argument(ArgumentType.STRING, "nome arquivo saída", 'o', nomeSaidaDefault),
-                            new Argument(ArgumentType.FLAG, "help", 'h', "false"))
+                    List.of(new Argument(ArgumentType.INTEGER, "verbosidade"       , 'v', "0"),
+                            new Argument(ArgumentType.STRING , "nome arquivo saída", 'o', nomeSaidaDefault),
+                            new Argument(ArgumentType.FLAG   , "help"              , 'h', ""))
                     , Arrays.copyOfRange(args, 0, args.length - 1));
         } catch (InvalidArgumentException ignored) {
             Cor.imprimeComCor("Argumentos inválidos! Veja ajuda abaixo:\n", Cor.RED);

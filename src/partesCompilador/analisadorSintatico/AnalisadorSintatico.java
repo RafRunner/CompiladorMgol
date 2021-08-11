@@ -9,7 +9,6 @@ import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSemantico.AnalisadorSemantico;
 import partesCompilador.analisadorSintatico.tabela.*;
 
-import java.io.IOException;
 import java.util.*;
 
 public class AnalisadorSintatico extends Analisador {
@@ -25,7 +24,7 @@ public class AnalisadorSintatico extends Analisador {
         this.analisadorSemantico = analisadorSemantico;
     }
 
-    public void analisa() throws IOException {
+    public void analisa() {
         TokenLocalizado tokenAtual = analisadorLexico.lerProximoTokenNaoComentario();
 
         // Iniciando variáveis axiliares para o tratamento de erro

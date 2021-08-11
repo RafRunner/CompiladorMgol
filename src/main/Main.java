@@ -11,10 +11,7 @@ import partesCompilador.analisadorLexico.AnalisadorLexico;
 import partesCompilador.analisadorSemantico.AnalisadorSemantico;
 import partesCompilador.analisadorSintatico.AnalisadorSintatico;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 
@@ -43,12 +40,13 @@ public class Main {
         final ArgumentParser argumentParser;
         try {
             argumentParser = new ArgumentParser(
-                    List.of(new Argument(ArgumentType.INTEGER, "verbosidade"       , 'v', "0"),
-                            new Argument(ArgumentType.STRING , "nome arquivo saída", 'o', nomeSaidaDefault),
-                            new Argument(ArgumentType.FLAG   , "help"              , 'h', ""))
+                    List.of(new Argument(ArgumentType.INTEGER, "verbosidade"  , 'v', "0"),
+                            new Argument(ArgumentType.STRING , "arquivo saida", 'o', nomeSaidaDefault),
+                            new Argument(ArgumentType.FLAG   , "help"         , 'h'))
                     , Arrays.copyOfRange(args, 0, args.length - 1));
-        } catch (InvalidArgumentException ignored) {
-            Cor.imprimeComCor("Argumentos inválidos! Veja ajuda abaixo:\n", Cor.RED);
+        } catch (InvalidArgumentException e) {
+            Cor.imprimeComCor(e.getMessage(), Cor.RED);
+            Cor.imprimeComCor("Veja ajuda abaixo:", Cor.RED);
             imprimeAjuda(false);
             return;
         }
@@ -157,7 +155,7 @@ public class Main {
         Cor.imprimeComCor("\t\t-v 1 -> Erros e avisos são impressos durante a análise/compilação.", Cor.CYAN);
         Cor.imprimeComCor("\t\t-v 2 -> Tudo durante o processo de análise/compilação é impresso. Pode ficar confuso.", Cor.CYAN);
 
-        Cor.imprimeComCor("\n\t-o (saída): argumento para definir o caminho e nome do arquivo de saída. Ex: -o ~/Documents/saida", Cor.PURPLE);
+        Cor.imprimeComCor("\n\t-o (arquivo saida): argumento para definir o caminho e nome do arquivo de saída. Ex: -o ~/Documents/saida", Cor.PURPLE);
 
         Cor.imprimeComCor("\nFeito por: Rafael Nunes Santana e Armando Soares e Silva Neto.\n", Cor.GREEN);
     }

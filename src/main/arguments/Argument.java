@@ -9,6 +9,11 @@ public class Argument {
 
     private String value;
 
+    // não faz sentido defaultValue em argumentos do tipo flag
+    public Argument(final ArgumentType type, final String name, final char flag) {
+        this(type, name, flag, "");
+    }
+
     public Argument(final ArgumentType type, final String name, final char flag, final String defaultValue) {
         this.type = type;
         this.name = name;
@@ -18,6 +23,10 @@ public class Argument {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getNameWithoutSpaces() {
+        return name.replaceAll(" ", "_");
     }
 
     protected String getValueToParse() {

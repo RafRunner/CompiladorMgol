@@ -16,12 +16,13 @@ public class ArgumentParser {
                 throw new InvalidArgumentException("Argumentos inválidos!");
             }
 
-            if (arg.length() == 2) {
-                final Argument argument = expectedArguments.stream()
-                        .filter(a -> ("-" + a.flag).equals(arg)).findFirst().orElse(null);
+            if (arg.length() == 2 || arg.charAt(1) == '-') {
+                final Argument argument = expectedArguments.stream().filter(a -> ("-" + a.flag).equals(arg)).findFirst().or(() ->
+                    expectedArguments.stream().filter(a -> ("--" + a.getNameWithoutSpaces()).equals(arg)).findFirst()
+                ).orElse(null);
 
                 if (argument == null) {
-                    throw new InvalidArgumentException("Argumentos inválidos!");
+                    throw new InvalidArgumentException("Argumentos inválidos! Argumento inesperado: " + arg);
                 }
 
                 if (argument.type == ArgumentType.FLAG) {
@@ -32,6 +33,7 @@ public class ArgumentParser {
                 i++;
                 argument.setValue(args[i]);
             }
+
             else {
                 final char[] flags = arg.substring(1).toCharArray();
                 for (final char flag : flags) {
@@ -39,7 +41,7 @@ public class ArgumentParser {
                             .filter(a -> a.flag == flag && a.type == ArgumentType.FLAG).findFirst().orElse(null);
 
                     if (argument == null) {
-                        throw new InvalidArgumentException("Argumentos inválidos!");
+                        throw new InvalidArgumentException("Argumentos inválidos! Flag inesperada: " + flag);
                     }
                     argument.setValue("true");
                 }

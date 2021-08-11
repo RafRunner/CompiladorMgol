@@ -28,18 +28,18 @@ public class AnalisadorLexico extends Analisador {
 
     // Populando a tabela de símbolos com as palavras reservadas
     private void iniciaTabelaDeSimbolos() {
-        tabelaDeSimbolos.put(Token.inicio.toString(), Token.inicio.darAtributos());
+        tabelaDeSimbolos.put(Token.inicio.toString()   , Token.inicio.darAtributos());
         tabelaDeSimbolos.put(Token.varinicio.toString(), Token.varinicio.darAtributos());
-        tabelaDeSimbolos.put(Token.varfim.toString(), Token.varfim.darAtributos());
-        tabelaDeSimbolos.put(Token.escreva.toString(), Token.escreva.darAtributos());
-        tabelaDeSimbolos.put(Token.leia.toString(), Token.leia.darAtributos());
-        tabelaDeSimbolos.put(Token.se.toString(), Token.se.darAtributos());
-        tabelaDeSimbolos.put(Token.entao.toString(), Token.entao.darAtributos());
-        tabelaDeSimbolos.put(Token.fimse.toString(), Token.fimse.darAtributos());
-        tabelaDeSimbolos.put(Token.fim.toString(), Token.fim.darAtributos());
-        tabelaDeSimbolos.put(Token.lit.toString(), Token.lit.darAtributos());
-        tabelaDeSimbolos.put(Token.inteiro.toString(), Token.inteiro.darAtributos());
-        tabelaDeSimbolos.put(Token.real.toString(), Token.real.darAtributos());
+        tabelaDeSimbolos.put(Token.varfim.toString()   , Token.varfim.darAtributos());
+        tabelaDeSimbolos.put(Token.escreva.toString()  , Token.escreva.darAtributos());
+        tabelaDeSimbolos.put(Token.leia.toString()     , Token.leia.darAtributos());
+        tabelaDeSimbolos.put(Token.se.toString()       , Token.se.darAtributos());
+        tabelaDeSimbolos.put(Token.entao.toString()    , Token.entao.darAtributos());
+        tabelaDeSimbolos.put(Token.fimse.toString()    , Token.fimse.darAtributos());
+        tabelaDeSimbolos.put(Token.fim.toString()      , Token.fim.darAtributos());
+        tabelaDeSimbolos.put(Token.lit.toString()      , Token.lit.darAtributos());
+        tabelaDeSimbolos.put(Token.inteiro.toString()  , Token.inteiro.darAtributos());
+        tabelaDeSimbolos.put(Token.real.toString()     , Token.real.darAtributos());
     }
 
     public AnalisadorLexico(final List<String> codigoFonte, List<Erro> erros, final int verbosidade) {

@@ -25,7 +25,7 @@ public enum Cor {
             System.out.println(mensagem);
             return;
         }
-        System.out.println(cor.toString() + mensagem.toString() + RESET.toString());
+        System.out.println(cor.toString() + mensagem.toString() + RESET);
     }
 
     @Override
